@@ -5,8 +5,8 @@ export default function Urgency() {
   return (
     <Card className="mb-6">
       <SectionTitle>What's the Urgency?</SectionTitle>
-      <p className="text-blue-900 text-sm leading-relaxed p-4 font-medium">
-        <span className="font-bold">Kementerian Luar Negeri</span> Eksekutif
+      <p className="text-blue-900 text-sm leading-relaxed p-4 font-bold">
+        <span className="font-extrabold">Kementerian Luar Negeri</span> Eksekutif
         Mahasiswa Universitas Brawijaya hadir sebagai entitas strategis
         diplomasi mahasiswa yang berfungsi sebagai katalisator orkestrasi
         jejaring eksternal dalam merajut sinergi eksternal secara sinergis,

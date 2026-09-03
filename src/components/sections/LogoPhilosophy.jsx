@@ -2,8 +2,6 @@ import SectionTitle from "../common/SectionTitle";
 import Card from "../common/Card";
 import { logoParts } from "../../data/logoPhilosophy";
 
-const logoFull = "/images/logo/logo-full.jpg";
-
 export default function LogoPhilosophy() {
   return (
     <Card className="mb-6">
@@ -16,7 +14,11 @@ export default function LogoPhilosophy() {
       </div>
 
       <div className="flex justify-center my-6">
-        <img src="images/logo/lugrireal.png" alt="Logo EM UB 2026" className="w-32 h-auto" />
+        <img
+          src="/images/logo/lugrireal.png"
+          alt="Logo EM UB 2026"
+          className="w-32 h-auto"
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-6">
@@ -31,7 +33,11 @@ export default function LogoPhilosophy() {
 function LogoPart({ image, title, description }) {
   return (
     <div className="flex flex-col items-center text-center">
-      <img src={image} alt={title} className="w-16 h-16 object-contain mb-2" />
+      <img
+        src={image}
+        alt={title}
+        className="w-16 h-16 object-contain mb-2"
+      />
       <p className="text-blue-900 text-xs leading-relaxed">{description}</p>
     </div>
   );
