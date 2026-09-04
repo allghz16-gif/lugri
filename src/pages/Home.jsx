@@ -278,6 +278,8 @@ export default function Home() {
                 '/images/team/idp4.jpeg',
                 '/images/team/idp5.jpeg',
                 '/images/team/idp6.jpeg',
+                '/images/team/idp7.jpeg',
+                '/images/team/idp8.jpeg',
               ]}
               alt="Kedirjenan Diplomasi Publik"
               onImageClick={(src) => setSelectedImage(src)}
@@ -300,6 +302,8 @@ export default function Home() {
                 '/images/team/pkm4.jpeg',
                 '/images/team/pkm5.jpeg',
                 '/images/team/pkm6.jpeg',
+                '/images/team/pkm7.jpeg',
+                '/images/team/pkm8.jpeg',
               ]}
               alt="Kedirjenan Kerjasama Multilateral"
               onImageClick={(src) => setSelectedImage(src)}

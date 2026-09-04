@@ -14,7 +14,7 @@ export default function ProgramCard({ title, icon, photo, desc }) {
         <div className="flex-1 flex flex-col justify-between">
           <div>
             {/* Title Bar */}
-            <div className="bg-[#0A1128] rounded-xl px-5 py-3 mb-6 w-full">
+            <div className="bg-[#001662] rounded-xl px-5 py-3 mb-6 w-full">
               <h3 className="text-[#97E614] font-bold text-xl md:text-2xl tracking-wide">
                 {title}
               </h3>
@@ -49,7 +49,7 @@ export default function ProgramCard({ title, icon, photo, desc }) {
 
           {/* Tombol Read More */}
           <div className="mt-6 sm:mt-4">
-            <button className="bg-[#0A1128] text-[#97E614] text-sm md:text-base font-semibold px-6 py-2.5 rounded-xl hover:bg-[#132048] transition shadow-md">
+            <button className="bg-[#001662] text-[#97E614] text-sm md:text-base font-semibold px-6 py-2.5 rounded-xl hover:bg-[#000f45] transition shadow-md">
               Read more
             </button>
           </div>

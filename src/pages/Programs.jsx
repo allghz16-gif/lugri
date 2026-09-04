@@ -13,7 +13,7 @@ export default function Programs() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050b2c] w-full flex justify-center">
+    <div className="min-h-screen bg-[#001662] w-full flex justify-center">
       <div className="w-full max-w-7xl px-4 sm:px-6 md:px-8 pt-28 pb-16">
         
         {/* Section Work Programs */}
@@ -46,7 +46,6 @@ export default function Programs() {
           ))}
         </div>
 
-        {/* CTA Banner dimasukkan ke DALAM max-w-7xl agar posisinya sama presisi seperti About Us */}
         <CtaBanner />
 
       </div>

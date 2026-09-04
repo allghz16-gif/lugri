@@ -7,17 +7,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          dark: '#0A1128',      // Navy gelap background utama
-          blue: '#1C2D5A',      // Blue card/container
-          green: '#97E614',     // Hijau aksen (tombol/highlight)
-          yellow: '#FFD700',    // Gold/Kuning aksen pendukung
-          card: '#121E3E',      // Background card gelap
-        }
+        'brand-dark': '#001662',
+        'brand-green': '#97E614',
       },
-      fontFamily: {
-        sans: ['Plus Jakarta Sans', 'sans-serif'], // Sesuaikan jika pakai font lain dari Figma
-      }
     },
   },
   plugins: [],

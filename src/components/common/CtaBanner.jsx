@@ -2,7 +2,7 @@ import React from 'react';
 
 const CtaBanner = () => {
   return (
-    <section className="bg-[#0A1128] py-16 px-6 border-t border-white/10 text-white">
+    <section className="bg-[#001662] py-16 px-6 border-t border-white/10 text-white">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div>
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
@@ -14,7 +14,7 @@ const CtaBanner = () => {
         </div>
         <a
           href="/contact"
-          className="bg-[#97E614] hover:bg-lime-400 text-[#0A1128] font-bold px-6 py-3 rounded-xl transition duration-300"
+          className="bg-[#97E614] hover:bg-lime-400 text-[#001662] font-bold px-6 py-3 rounded-xl transition duration-300"
         >
           Contact us
         </a>

@@ -6,8 +6,9 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="fixed top-6 left-0 right-0 z-50 px-4 flex justify-center">
-      <nav className="w-full max-w-5xl bg-[#131D38]/80 backdrop-blur-md border border-white/20 rounded-full px-6 py-3 flex items-center justify-between shadow-2xl">
+    <div className="fixed top-6 left-0 right-0 z-50 px-6 md:px-12 flex justify-center">
+      {/* Diubah menjadi max-w-7xl agar lebih panjang ke kanan & kiri */}
+      <nav className="w-full max-w-7xl bg-[#2B3970] border-2 border-white rounded-full px-8 py-3 flex items-center justify-between shadow-2xl">
         
         {/* Group Logo & Nama */}
         <Link to="/" className="flex items-center gap-3">
@@ -40,22 +41,22 @@ export default function Navbar() {
         </Link>
 
         {/* Navigation Links */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+        <div className="hidden md:flex items-center gap-10 text-sm font-bold">
           <Link 
             to="/" 
-            className={isActive('/') ? 'text-[#97E614] font-bold' : 'text-white hover:text-[#97E614] transition'}
+            className={isActive('/') ? 'text-[#97E614]' : 'text-white hover:text-[#97E614] transition'}
           >
             Home
           </Link>
           <Link 
             to="/about" 
-            className={isActive('/about') ? 'text-[#97E614] font-bold' : 'text-white hover:text-[#97E614] transition'}
+            className={isActive('/about') ? 'text-[#97E614]' : 'text-white hover:text-[#97E614] transition'}
           >
             About us
           </Link>
           <Link 
             to="/programs" 
-            className={isActive('/programs') ? 'text-[#97E614] font-bold' : 'text-white hover:text-[#97E614] transition'}
+            className={isActive('/programs') ? 'text-[#97E614]' : 'text-white hover:text-[#97E614] transition'}
           >
             Programs
           </Link>
@@ -64,7 +65,7 @@ export default function Navbar() {
         {/* Contact Us Button */}
         <Link 
           to="/contact" 
-          className="bg-[#97E614] hover:bg-lime-400 text-[#0A1128] font-bold text-xs md:text-sm px-6 py-2.5 rounded-full transition-all duration-300 shadow-md"
+          className="bg-[#97E614] hover:bg-lime-400 text-[#001662] font-bold text-xs md:text-sm px-6 py-2.5 rounded-2xl transition-all duration-300 shadow-md"
         >
           Contact us
         </Link>

@@ -2,10 +2,10 @@ import React from 'react';
 import CtaBanner from '../components/common/CtaBanner';
 import Card from '../components/common/Card';
 
-/* ---------- Header Title Bar (Disamakan Tone & Stylenya dengan Programs) ---------- */
+/* ---------- Header Title Bar ---------- */
 function SectionTitle({ children }) {
   return (
-    <div className="w-full bg-[#0A1128] rounded-xl px-5 py-3 mb-6">
+    <div className="w-full bg-[#001662] rounded-xl px-5 py-3 mb-6">
       <h3 className="text-[#97E614] font-bold text-xl md:text-2xl tracking-wide">
         {children}
       </h3>
@@ -15,18 +15,18 @@ function SectionTitle({ children }) {
 
 export default function AboutUs() {
   return (
-    <div className="bg-[#0A1128] min-h-screen text-slate-800 font-sans overflow-x-hidden">
+    <div className="bg-[#001662] min-h-screen text-slate-800 font-sans overflow-x-hidden">
       {/* Spacer untuk Navbar floating */}
       <div className="h-28 md:h-32" />
 
-      {/* Container utama disamakan lebarnya dengan Programs (max-w-7xl) */}
+      {/* Container utama (max-w-7xl) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-8">
 
         {/* 1. WHAT'S THE URGENCY */}
         <Card className="p-6 md:p-8 bg-white rounded-3xl shadow-lg border border-slate-100">
           <SectionTitle>What's the Urgency?</SectionTitle>
           <p className="text-slate-800 text-base md:text-lg leading-relaxed text-justify font-normal">
-            <strong className="text-[#0A1128]">Kementerian Luar Negeri</strong> Eksekutif
+            <strong className="text-[#001662]">Kementerian Luar Negeri</strong> Eksekutif
             Mahasiswa Universitas Brawijaya hadir sebagai entitas strategis diplomasi
             mahasiswa yang berfungsi sebagai katalisator orkestrasi jejaring eksternal
             dalam merajut sinergi eksternal secara sinergis, dengan mandat mengonversi
@@ -54,23 +54,23 @@ export default function AboutUs() {
             <SectionTitle>Misi</SectionTitle>
             <ul className="space-y-3 text-slate-800 text-base md:text-lg leading-relaxed px-1">
               <li className="flex items-start gap-3">
-                <span className="text-[#0A1128] font-bold text-xl select-none">•</span>
+                <span className="text-[#001662] font-bold text-xl select-none">•</span>
                 <span className="text-justify">
-                  <strong className="text-[#0A1128]">Orkestrasi dan harmonisasi sinergi eksternal</strong>{' '}
+                  <strong className="text-[#001662]">Orkestrasi dan harmonisasi sinergi eksternal</strong>{' '}
                   dalam eskalasi peran mahasiswa sebagai representasi resmi EM UB lintas sektor.
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-[#0A1128] font-bold text-xl select-none">•</span>
+                <span className="text-[#001662] font-bold text-xl select-none">•</span>
                 <span className="text-justify">
-                  <strong className="text-[#0A1128]">Konsolidasi dan institusionalisasi relasi strategis</strong>{' '}
+                  <strong className="text-[#001662]">Konsolidasi dan institusionalisasi relasi strategis</strong>{' '}
                   guna memperkuat marwah serta citra kelembagaan EM UB.
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-[#0A1128] font-bold text-xl select-none">•</span>
+                <span className="text-[#001662] font-bold text-xl select-none">•</span>
                 <span className="text-justify">
-                  <strong className="text-[#0A1128]">Transformasi jejaring eksternal menjadi aksi kolektif</strong>{' '}
+                  <strong className="text-[#001662]">Transformasi jejaring eksternal menjadi aksi kolektif</strong>{' '}
                   yang terintegrasi, inklusif, berkelanjutan, dan berdampak struktural bagi
                   Universitas Brawijaya.
                 </span>
