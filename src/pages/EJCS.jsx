@@ -102,6 +102,48 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
 
 export default function EastJavaCollaborationSummit() {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const detailScrollRef = useRef(null);
+
+  // Data 3 Card Slide Detail Program East Java Collaboration Summit
+  const detailProgramCards = [
+    {
+      title: 'Sasaran',
+      description: 'Elemen pentahelix yang mencakup akademisi, pemerintah, pelaku usaha, komunitas, dan media di Jawa Timur.',
+      image: '/images/team/sasaranejcs.png',
+    },
+    {
+      title: 'Tujuan Program',
+      description:
+        'Membangun ruang dialog dan pertukaran gagasan yang inklusif untuk memperkuat sinergi serta mendorong aksi nyata kolaborasi wujud aksi berkelanjutan lintas sektor di Jawa Timur.',
+      image: '/images/team/ejcske2.png',
+    },
+    {
+      title: 'Manfaat Bergabung',
+      description:
+        'Memperluas jejaring strategis lintas sektor, mendapatkan wawasan mendalam mengenai isu keberlanjutan daerah, serta berkontribusi langsung dalam perumusan solusi konkret.',
+      image: '/images/team/manfaatejcs.png',
+    },
+  ];
+
+  // Handler Scroll untuk deteksi index card aktif
+  const handleDetailScroll = () => {
+    const el = detailScrollRef.current;
+    if (!el) return;
+    const cardWidth = el.clientWidth;
+    const index = Math.round(el.scrollLeft / cardWidth);
+    setActiveCardIndex(index);
+  };
+
+  // Handler click dot indikator
+  const scrollToCard = (index) => {
+    const el = detailScrollRef.current;
+    if (!el) return;
+    el.scrollTo({
+      left: index * el.clientWidth,
+      behavior: 'smooth',
+    });
+  };
 
   // Program Activities sesuai format: talkshow.png, pbc.png
   const programActivities = [
@@ -142,7 +184,7 @@ export default function EastJavaCollaborationSummit() {
           </div>
         </div>
 
-        {/* SECTION 2: DETAIL PROGRAM & TUJUAN */}
+        {/* SECTION 2: DETAIL PROGRAM & TUJUAN (CAROUSEL + DOTS INDIKATOR) */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
           <div className="w-full md:w-1/3 flex flex-col justify-between">
             <div>
@@ -157,19 +199,50 @@ export default function EastJavaCollaborationSummit() {
             </div>
           </div>
 
-          <div className="w-full md:w-2/3 bg-[#97E614] p-5 md:p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-center">
-            <div className="w-full md:w-1/2 h-48 md:h-56 rounded-xl overflow-hidden shrink-0">
-              <img
-                src="/images/team/ejcske2.png"
-                alt="Detail Program East Java Collaboration Summit"
-                className="w-full h-full object-cover rounded-xl"
-              />
+          <div className="w-full md:w-2/3 flex flex-col items-center">
+            {/* Scrollable Container Card Hijau */}
+            <div
+              ref={detailScrollRef}
+              onScroll={handleDetailScroll}
+              className="w-full flex overflow-x-auto no-scrollbar snap-x snap-mandatory rounded-3xl"
+            >
+              {detailProgramCards.map((card, idx) => (
+                <div
+                  key={idx}
+                  className="w-full shrink-0 snap-center bg-[#97E614] p-5 md:p-6 rounded-3xl flex flex-col md:flex-row gap-6 items-center"
+                >
+                  <div className="w-full md:w-1/2 h-48 md:h-56 rounded-2xl overflow-hidden shrink-0">
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      className="w-full h-full object-cover rounded-2xl"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                  <div className="w-full md:w-1/2 text-black">
+                    <h3 className="font-bold text-lg md:text-xl mb-2 text-[#001662]">{card.title}</h3>
+                    <p className="text-xs md:text-sm leading-relaxed text-justify text-slate-900 font-medium">
+                      {card.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="w-full md:w-1/2 text-black">
-              <h3 className="font-bold text-lg md:text-xl mb-2">Tujuan Program</h3>
-              <p className="text-xs md:text-sm leading-relaxed text-justify">
-                Membangun ruang dialog dan pertukaran gagasan yang inklusif untuk memperkuat sinergi serta mendorong aksi nyata kolaborasi wujud aksi berkelanjutan lintas sektor di Jawa Timur.
-              </p>
+
+            {/* Indikator Titik-titik (Dots) */}
+            <div className="flex items-center justify-center gap-2 mt-4">
+              {detailProgramCards.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => scrollToCard(idx)}
+                  className={`h-2.5 rounded-full transition-all duration-300 ${
+                    activeCardIndex === idx
+                      ? 'w-8 bg-[#001662]'
+                      : 'w-2.5 bg-slate-300 hover:bg-slate-400'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
             </div>
           </div>
         </div>

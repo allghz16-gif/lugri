@@ -11,7 +11,6 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
   const [isPaused, setIsPaused] = useState(false);
   const doubled = [...images, ...images];
 
-  // Posisi awal: jika reverse, mulai dari tengah agar bisa bergulir mundur
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -20,12 +19,11 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
     }
   }, [reverse]);
 
-  // Auto-scroll menggunakan requestAnimationFrame
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
     let rafId;
-    const speed = 0.6; // kecepatan scrolling (px/frame)
+    const speed = 0.6;
 
     const step = () => {
       if (!isPaused && !isDragging.current && el) {
@@ -104,6 +102,49 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
 
 export default function BrawijayaMuda() {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const detailScrollRef = useRef(null);
+
+  // Data 3 Card Slide Detail Program
+  const detailProgramCards = [
+    {
+      title: 'Sasaran',
+      description:
+        'Program ini ditujukan untuk siswa SMA/MA yang ingin memahami peluang masuk perguruan tinggi, budaya akademik, dan potensi pengembangan diri.',
+      image: '/images/team/sasaranbramud.png',
+    },
+    {
+      title: 'Tujuan Program',
+      description:
+        'Sebagai wadah perkenalan kehidupan kampus Universitas Brawijaya secara luas bagi para siswa SMA/MA sederajat yang berminat untuk melanjutkan pendidikan di perguruan tinggi. Melalui sosialisasi, tryout, dan mentoring interaktif, program ini bertujuan mendampingi persiapan akademis maupun non-akademis calon mahasiswa baru.',
+      image: '/images/team/bramudke2.png',
+    },
+    {
+      title: 'Manfaat Bergabung',
+      description:
+        'Peserta mendapatkan informasi terarah tentang dunia kampus, sesi tanya jawab, pengalaman kegiatan kampus, serta motivasi untuk menentukan langkah pendidikan selanjutnya.',
+      image: '/images/team/manfaatbramud.png',
+    },
+  ];
+
+  // Handler Scroll untuk mendeteksi posisi slide card
+  const handleDetailScroll = () => {
+    const el = detailScrollRef.current;
+    if (!el) return;
+    const cardWidth = el.clientWidth;
+    const index = Math.round(el.scrollLeft / cardWidth);
+    setActiveCardIndex(index);
+  };
+
+  // Click dot untuk pindah slide
+  const scrollToCard = (index) => {
+    const el = detailScrollRef.current;
+    if (!el) return;
+    el.scrollTo({
+      left: index * el.clientWidth,
+      behavior: 'smooth',
+    });
+  };
 
   // 5 Program Activities
   const programActivities = [
@@ -114,7 +155,7 @@ export default function BrawijayaMuda() {
     { title: 'Jelajah Kampus', image: '/images/team/jelajahkampus.png' }
   ];
 
-  // 15 Dokumentasi Kegiatan (bramud1.png s/d bramud15.png)
+  // 15 Dokumentasi Kegiatan
   const dokumentasiList = Array.from(
     { length: 15 },
     (_, i) => `/images/team/bramud${i + 1}.png`
@@ -147,7 +188,7 @@ export default function BrawijayaMuda() {
           </div>
         </div>
 
-        {/* SECTION 2: DETAIL PROGRAM & TUJUAN */}
+        {/* SECTION 2: DETAIL PROGRAM & TUJUAN (PERSIS GAMBAR + DOTS SCROLL) */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
           <div className="w-full md:w-1/3 flex flex-col justify-between">
             <div>
@@ -162,19 +203,50 @@ export default function BrawijayaMuda() {
             </div>
           </div>
 
-          <div className="w-full md:w-2/3 bg-[#97E614] p-5 md:p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-center">
-            <div className="w-full md:w-1/2 h-48 md:h-56 rounded-xl overflow-hidden shrink-0">
-              <img
-                src="/images/team/bramudke2.png"
-                alt="Detail Program Brawijaya Muda"
-                className="w-full h-full object-cover rounded-xl"
-              />
+          <div className="w-full md:w-2/3 flex flex-col items-center">
+            {/* Scrollable Container Card Hijau */}
+            <div
+              ref={detailScrollRef}
+              onScroll={handleDetailScroll}
+              className="w-full flex overflow-x-auto no-scrollbar snap-x snap-mandatory rounded-3xl"
+            >
+              {detailProgramCards.map((card, idx) => (
+                <div
+                  key={idx}
+                  className="w-full shrink-0 snap-center bg-[#97E614] p-5 md:p-6 rounded-3xl flex flex-col md:flex-row gap-6 items-center"
+                >
+                  <div className="w-full md:w-1/2 h-48 md:h-56 rounded-2xl overflow-hidden shrink-0">
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      className="w-full h-full object-cover rounded-2xl"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                  <div className="w-full md:w-1/2 text-black">
+                    <h3 className="font-bold text-lg md:text-xl mb-2 text-[#001662]">{card.title}</h3>
+                    <p className="text-xs md:text-sm leading-relaxed text-justify text-slate-900 font-medium">
+                      {card.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="w-full md:w-1/2 text-black">
-              <h3 className="font-bold text-lg md:text-xl mb-2">Tujuan Program</h3>
-              <p className="text-xs md:text-sm leading-relaxed text-justify">
-                Sebagai wadah perkenalan kehidupan kampus Universitas Brawijaya secara luas bagi para siswa SMA/MA sederajat yang berminat untuk melanjutkan pendidikan di perguruan tinggi. Melalui sosialisasi, tryout, dan mentoring interaktif, program ini bertujuan mendampingi persiapan akademis maupun non-akademis calon mahasiswa baru.
-              </p>
+
+            {/* Indicator Dots di Bawah Card Hijau */}
+            <div className="flex items-center justify-center gap-2 mt-4">
+              {detailProgramCards.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => scrollToCard(idx)}
+                  className={`h-2.5 rounded-full transition-all duration-300 ${
+                    activeCardIndex === idx
+                      ? 'w-8 bg-[#001662]'
+                      : 'w-2.5 bg-slate-300 hover:bg-slate-400'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -229,7 +301,7 @@ export default function BrawijayaMuda() {
           </div>
         </div>
 
-        {/* SECTION 4: DOKUMENTASI KEGIATAN (IMAGE CAROUSEL AUTO-SCROLL & DRAGGABLE) */}
+        {/* SECTION 4: DOKUMENTASI KEGIATAN */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col">
           <div className="w-full text-center mb-6">
             <div className="bg-[#001662] rounded-2xl w-full py-3">

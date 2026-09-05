@@ -202,7 +202,7 @@ export default function Home() {
           <h1
             className="text-5xl md:text-7xl lg:text-8xl uppercase leading-[0.9] text-white tracking-tight"
             style={{
-              fontFamily: "'Baloo 2', sans-serif",
+              fontFamily: "'Stretch Pro', sans-serif",
               fontWeight: 800,
               WebkitTextStroke: '3px #1E3A8A',
               textShadow: '3px 3px 0 #1E3A8A, 6px 6px 20px rgba(0,0,0,0.5)',
