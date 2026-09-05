@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const CtaBanner = () => {
   return (
@@ -12,12 +13,12 @@ const CtaBanner = () => {
             Get in touch to connect with us! 👋
           </p>
         </div>
-        <a
-          href="/contact"
-          className="bg-[#97E614] hover:bg-lime-400 text-[#001662] font-bold px-6 py-3 rounded-xl transition duration-300"
+        <Link
+          to="/contact"
+          className="bg-[#97E614] hover:bg-lime-400 text-[#001662] font-bold px-6 py-3 rounded-xl transition duration-300 inline-block"
         >
           Contact us
-        </a>
+        </Link>
       </div>
     </section>
   );

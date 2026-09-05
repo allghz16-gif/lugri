@@ -32,11 +32,11 @@ export default function ContactCard({ items, photo, altText }) {
       </div>
 
       {/* Bagian Kanan: Foto Poster */}
-      <div className="w-full md:w-72 h-90 flex-shrink-0 self-center md:self-start">
+      <div className="w-full md:w-72 h-auto flex-shrink-0 self-center md:self-start">
         <img
           src={photo}
           alt={altText}
-          className="w-full h-full object-cover rounded-2xl shadow-md border border-gray-100"
+          className="w-full h-auto object-contain rounded-2xl shadow-md border border-gray-100"
           onError={(e) => {
             if (!e.target.dataset.retried) {
               e.target.dataset.retried = 'true';
