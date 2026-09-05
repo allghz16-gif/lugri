@@ -10,7 +10,7 @@ export default function Footer() {
         </div>
         <div className="flex gap-6 text-xs">
           <a href="#" className="hover:text-white transition">Tiktok</a>
-          <a href="#" className="hover:text-white transition">Instagram</a>
+          <a href="https://www.instagram.com/lugri_emub?igsi=YmJkOThxeXE1Yzgz" className="hover:text-white transition">Instagram</a>
           <a href="#" className="hover:text-white transition">Youtube</a>
         </div>
       </div>

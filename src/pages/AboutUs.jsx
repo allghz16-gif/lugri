@@ -5,8 +5,11 @@ import Card from '../components/common/Card';
 /* ---------- Header Title Bar ---------- */
 function SectionTitle({ children }) {
   return (
-    <div className="w-full bg-[#001662] rounded-xl px-5 py-3 mb-6">
-      <h3 className="text-[#97E614] font-bold text-xl md:text-2xl tracking-wide">
+    <div className="w-full bg-[#121B74] rounded-xl px-5 py-3.5 mb-6 shadow-sm">
+      <h3 
+        className="text-[#97E614] font-extrabold text-xl md:text-2xl uppercase tracking-wider"
+        style={{ fontFamily: "'Syne', 'Montserrat', sans-serif" }}
+      >
         {children}
       </h3>
     </div>

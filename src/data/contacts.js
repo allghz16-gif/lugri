@@ -7,12 +7,12 @@ export const contactSections = [
       {
         title: "PKS",
         name: "Ismy",
-        waNumber: "089677511261", // Ganti dengan nomor WhatsApp Ismy
+        waNumber: "082195356407", // Ganti dengan nomor WhatsApp Ismy
       },
       {
         title: "Partnership",
         name: "Dea",
-        waNumber: "6281234567891", // Ganti dengan nomor WhatsApp Dea
+        waNumber: "082190203454", // Ganti dengan nomor WhatsApp Dea
       },
     ],
   },
@@ -24,12 +24,12 @@ export const contactSections = [
       {
         title: "Network EM",
         name: "Revina",
-        waNumber: "6281234567892", // Ganti dengan nomor WhatsApp Revina
+        waNumber: "6281234567892", // Belum diganti dengan nomor WhatsApp Revina
       },
       {
         title: "EM Vitation",
         name: "Razan",
-        waNumber: "6281234567893", // Ganti dengan nomor WhatsApp Razan
+        waNumber: "085591232276", // Ganti dengan nomor WhatsApp Razan
       },
     ],
   },
@@ -41,12 +41,12 @@ export const contactSections = [
       {
         title: "Media Partner Internal",
         name: "Azka",
-        waNumber: "6281234567894", // Ganti dengan nomor WhatsApp Azka
+        waNumber: "085228800070", // Ganti dengan nomor WhatsApp Azka
       },
       {
         title: "Media Partner Eksternal",
         name: "Diandra",
-        waNumber: "6281234567895", // Ganti dengan nomor WhatsApp Diandra
+        waNumber: "082132655909", // Ganti dengan nomor WhatsApp Diandra
       },
     ],
   },

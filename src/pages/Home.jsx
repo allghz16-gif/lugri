@@ -3,10 +3,13 @@ import { Users2, Landmark, X } from 'lucide-react';
 import CtaBanner from '../components/common/CtaBanner';
 
 /* ---------- Reusable 3D Tilt Card ---------- */
-function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl' }) {
+function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', role, name, faculty }) {
+  // Shadow awal yang dibuat jauh lebih tebal, pekat, dan menyebar
+  const defaultShadow = '0 25px 50px -12px rgba(10, 17, 40, 0.65), 0 15px 30px -8px rgba(0, 0, 0, 0.5)';
+
   const [style, setStyle] = useState({
     transform: 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)',
-    boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+    boxShadow: defaultShadow,
     transition: 'transform 0.5s ease, box-shadow 0.5s ease',
   });
 
@@ -22,7 +25,8 @@ function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl' }
 
     setStyle({
       transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04,1.04,1.04)`,
-      boxShadow: `${-rotateY * 1.5}px ${rotateX * 1.5}px 30px rgba(0,0,0,0.35)`,
+      // Dynamic Shadow yang jauh lebih tebal dan dramatis saat di-hover
+      boxShadow: `${-rotateY * 3}px ${rotateX * 3 + 30}px 60px rgba(10, 17, 40, 0.8)`,
       transition: 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
     });
   };
@@ -30,25 +34,45 @@ function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl' }
   const handleMouseLeave = () => {
     setStyle({
       transform: 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)',
-      boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+      boxShadow: defaultShadow,
       transition: 'transform 0.5s ease, box-shadow 0.5s ease',
     });
   };
 
   return (
-    <div
-      className={`${rounded} overflow-hidden cursor-pointer will-change-transform ${className}`}
-      style={style}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={onClick}
-    >
-      <img
-        src={src}
-        alt={alt}
-        className="w-full h-auto block pointer-events-none select-none"
-        onError={(e) => { e.target.style.display = 'none'; }}
-      />
+    <div className="flex flex-col p-2">
+      {/* Container Luar: Menerima inline boxShadow dari Tilt Effect */}
+      <div
+        className={`relative ${rounded} cursor-pointer will-change-transform ${className}`}
+        style={style}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={onClick}
+      >
+        {/* Container Dalam: Memotong batas gambar agar sudut rounded presisi */}
+        <div className={`w-full h-full ${rounded} overflow-hidden relative`}>
+          {/* Badge Posisi / Jabatan */}
+          {role && (
+            <div className="absolute top-0 left-0 bg-[#001662] text-white text-xs font-semibold px-4 py-1.5 rounded-br-xl z-10 shadow-lg">
+              {role}
+            </div>
+          )}
+          <img
+            src={src}
+            alt={alt}
+            className="w-full h-auto block pointer-events-none select-none object-cover"
+            onError={(e) => { e.target.style.display = 'none'; }}
+          />
+        </div>
+      </div>
+
+      {/* Detail Nama & Fakultas */}
+      {(name || faculty) && (
+        <div className="mt-3 px-1">
+          {name && <h3 className="text-base font-bold text-[#0A1128] leading-tight">{name}</h3>}
+          {faculty && <p className="text-xs text-gray-500 font-medium mt-0.5">{faculty}</p>}
+        </div>
+      )}
     </div>
   );
 }
@@ -63,7 +87,6 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
   const [isPaused, setIsPaused] = useState(false);
   const doubled = [...images, ...images];
 
-  // Posisi awal: kalau reverse, mulai dari tengah supaya bisa gulir mundur tanpa mentok
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -72,12 +95,11 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
     }
   }, [reverse]);
 
-  // Auto-scroll pakai requestAnimationFrame, jalan terus kecuali di-hover/drag
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
     let rafId;
-    const speed = 0.6; // px per frame
+    const speed = 0.6;
 
     const step = () => {
       if (!isPaused && !isDragging.current && el) {
@@ -125,7 +147,8 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
   return (
     <div
       ref={scrollRef}
-      className="flex gap-4 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none"
+      /* p-6 memberikan ruang luas di sekitar gambar agar shadow tebal tidak terpotong (overflow) */
+      className="flex gap-6 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none p-6"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => { setIsPaused(false); endDrag(); }}
       onMouseDown={handlePointerDown}
@@ -141,7 +164,11 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
           src={src}
           alt={`${alt} ${idx + 1}`}
           draggable={false}
-          className="h-72 md:h-80 w-auto rounded-2xl shadow-md flex-shrink-0 pointer-events-auto"
+          /* Custom style box-shadow kuat dan jelas */
+          style={{
+            boxShadow: '0 15px 30px -5px rgba(10, 17, 40, 0.35), 0 8px 15px -6px rgba(0, 0, 0, 0.25)',
+          }}
+          className="h-72 md:h-80 w-auto rounded-2xl flex-shrink-0 pointer-events-auto transition-all duration-300 hover:scale-105 hover:-translate-y-1"
           onClick={() => handleImageClick(src)}
           onError={(e) => { e.target.style.display = 'none'; }}
         />
@@ -160,20 +187,20 @@ export default function Home() {
   return (
     <div className="bg-white min-h-screen text-gray-900 font-sans overflow-x-hidden">
 
-      {/* 1. HERO SECTION - dengan margin di sekeliling, rounded */}
-      <section className="relative mx-3 sm:mx-6 md:mx-10 mt-4 rounded-3xl min-h-[550px] flex items-center justify-center overflow-hidden shadow-2xl">
+      {/* 1. HERO SECTION */}
+      <section className="relative mx-3 sm:mx-6 md:mx-10 mt-4 rounded-3xl min-h-[500px] md:min-h-[580px] flex items-end justify-center overflow-hidden shadow-2xl">
         <div className="absolute inset-0 z-0">
           <img
             src="/images/team/bersamalugri.jpeg"
             alt="Kemenlu EM UB Team"
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1128] via-[#0A1128]/70 to-[#0A1128]/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1128] via-[#0A1128]/60 to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center px-4 pt-24 md:pt-28 pb-14 space-y-4">
+        <div className="relative z-10 max-w-5xl mx-auto text-center px-4 pb-8 md:pb-10">
           <h1
-            className="text-5xl md:text-7xl uppercase leading-[0.95] text-white tracking-tight"
+            className="text-5xl md:text-7xl lg:text-8xl uppercase leading-[0.9] text-white tracking-tight"
             style={{
               fontFamily: "'Baloo 2', sans-serif",
               fontWeight: 800,
@@ -184,13 +211,13 @@ export default function Home() {
             Ministry of <br />
             Foreign Affairs
           </h1>
-          <p className="text-gray-200 text-sm md:text-base font-light">
+          <p className="text-white text-lg sm:text-xl md:text-2xl font-medium tracking-wide mt-1.5 drop-shadow-md">
             Eksekutif Mahasiswa Universitas Brawijaya 2026
           </p>
         </div>
       </section>
 
-      <div className="h-20" />
+      <div className="h-16" />
 
       <div className="pb-12 px-4 md:px-12 space-y-16">
 
@@ -201,7 +228,7 @@ export default function Home() {
 
           <div className="grid sm:grid-cols-2 gap-8 border-t border-gray-200 pt-8">
             <div className="flex items-start gap-4">
-              <div className="bg-[#0A1128] rounded-lg p-3 flex-shrink-0">
+              <div className="bg-[#0A1128] rounded-lg p-3 flex-shrink-0 shadow-md">
                 <Users2 className="text-[#97E614]" size={24} />
               </div>
               <div>
@@ -213,7 +240,7 @@ export default function Home() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="bg-[#0A1128] rounded-lg p-3 flex-shrink-0">
+              <div className="bg-[#0A1128] rounded-lg p-3 flex-shrink-0 shadow-md">
                 <Landmark className="text-[#97E614]" size={24} />
               </div>
               <div>
@@ -235,36 +262,48 @@ export default function Home() {
           </div>
 
           {/* LEVEL 1: MENTERI & WAMEN */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <TiltCard
               src="/images/team/menteriilugs.jpeg"
-              alt="Menteri - Dimas Putra Syafiie"
+              alt="Menteri - Dimas Putra Sofyan"
+              role="Minister"
+              name="Dimas Putra Sofyan"
+              faculty="FISIP'24"
               onClick={() => setSelectedImage('/images/team/menteriilugs.jpeg')}
             />
             <TiltCard
               src="/images/team/wamenlugs.jpeg"
-              alt="Wakil Menteri - Fahza Hasbi Uliaansyah"
+              alt="Vice Minister - Fairuz Nadir Alamsyah"
+              role="Vice Minister"
+              name="Fairuz Nadir Alamsyah"
+              faculty="FISIP'24"
               onClick={() => setSelectedImage('/images/team/wamenlugs.jpeg')}
             />
           </div>
 
           {/* LEVEL 2: DIRJEN */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <TiltCard
               src="/images/team/acle.jpeg"
-              alt="Dirjen Diplomasi Publik - Naysilla Lyra Aprillia"
+              alt="Directorate IDP - Miracle Lyra Aprilya"
+              role="Directorate IDP"
+              name="Miracle Lyra Aprilya"
+              faculty="FH'24"
               onClick={() => setSelectedImage('/images/team/acle.jpeg')}
             />
             <TiltCard
               src="/images/team/kafkha.jpeg"
-              alt="Dirjen Perjanjian Kerjasama Multilateral - Dzulfiqar Saifur Nugroho"
+              alt="Directorate PKM - Kafkha Saifan Nugraha"
+              role="Directorate PKM"
+              name="Kafkha Saifan Nugraha"
+              faculty="FTAB'24"
               onClick={() => setSelectedImage('/images/team/kafkha.jpeg')}
             />
           </div>
 
-          {/* LEVEL 3a: KEDIRJENAN - Diplomasi Publik (carousel bergulir) */}
-          <div className="space-y-4 pt-4">
-            <div className="flex items-center gap-2">
+          {/* LEVEL 3a: KEDIRJENAN - Diplomasi Publik */}
+          <div className="space-y-2 pt-4">
+            <div className="flex items-center gap-2 px-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[#97E614] flex-shrink-0"></span>
               <p className="text-base md:text-lg font-bold text-[#0A1128] uppercase tracking-wide">
                 Expert Staff to the Director General of Information and Public Diplomacy
@@ -286,9 +325,9 @@ export default function Home() {
             />
           </div>
 
-          {/* LEVEL 3b: KEDIRJENAN - Perjanjian Kerjasama Multilateral (carousel bergulir) */}
-          <div className="space-y-4 pt-4">
-            <div className="flex items-center gap-2">
+          {/* LEVEL 3b: KEDIRJENAN - Perjanjian Kerjasama Multilateral */}
+          <div className="space-y-2 pt-4">
+            <div className="flex items-center gap-2 px-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[#97E614] flex-shrink-0"></span>
               <p className="text-base md:text-lg font-bold text-[#0A1128] uppercase tracking-wide">
                 Expert Staff to the Director General of Multilateral Cooperation Agreements

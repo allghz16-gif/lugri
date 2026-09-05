@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom'
 import Card from '../common/Card'
 
-export default function ProgramCard({ title, icon, photo, desc }) {
+export default function ProgramCard({ title, icon, photo, desc, linkTo }) {
   const lowerTitle = title.toLowerCase()
   const isBramud = lowerTitle.includes('brawijaya muda')
   const isEJCS = lowerTitle.includes('east java')
@@ -14,8 +15,11 @@ export default function ProgramCard({ title, icon, photo, desc }) {
         <div className="flex-1 flex flex-col justify-between">
           <div>
             {/* Title Bar */}
-            <div className="bg-[#001662] rounded-xl px-5 py-3 mb-6 w-full">
-              <h3 className="text-[#97E614] font-bold text-xl md:text-2xl tracking-wide">
+            <div className="bg-[#001662] rounded-xl px-5 py-3 mb-6 w-full overflow-hidden">
+              <h3 
+                className="text-[#97E614] text-xl md:text-2xl font-[900] tracking-wider uppercase inline-block origin-left transform scale-x-110"
+                style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Arial Black', sans-serif" }}
+              >
                 {title}
               </h3>
             </div>
@@ -29,11 +33,11 @@ export default function ProgramCard({ title, icon, photo, desc }) {
                     alt={title}
                     className={`object-contain transition-all ${
                       isBramud
-                        ? 'w-full h-full scale-150 translate-y-15' // Bramud jumbo
+                        ? 'w-full h-full scale-150 translate-y-15'
                         : isEJCS
-                        ? 'w-full h-full scale-150 translate-y-15' // EJCS besar + offset shadow
+                        ? 'w-full h-full scale-150 translate-y-15'
                         : isBB
-                        ? 'w-full h-full scale-90' // BB kembali ke ukuran semula/sedang
+                        ? 'w-full h-full scale-90'
                         : 'w-full h-full scale-100'
                     }`}
                   />
@@ -47,11 +51,23 @@ export default function ProgramCard({ title, icon, photo, desc }) {
             </div>
           </div>
 
-          {/* Tombol Read More */}
-          <div className="mt-6 sm:mt-4">
-            <button className="bg-[#001662] text-[#97E614] text-sm md:text-base font-semibold px-6 py-2.5 rounded-xl hover:bg-[#000f45] transition shadow-md">
-              Read more
-            </button>
+          {/* Tombol Read More (Diperbaiki agar clickable) */}
+          <div className="mt-6 sm:mt-4 relative z-10">
+            {linkTo ? (
+              <Link
+                to={linkTo}
+                className="inline-block bg-[#001662] text-[#97E614] text-sm md:text-base font-semibold px-6 py-2.5 rounded-xl hover:bg-[#000f45] transition shadow-md cursor-pointer pointer-events-auto"
+              >
+                Read more
+              </Link>
+            ) : (
+              <button
+                type="button"
+                className="bg-[#001662] text-[#97E614] text-sm md:text-base font-semibold px-6 py-2.5 rounded-xl hover:bg-[#000f45] transition shadow-md cursor-pointer pointer-events-auto"
+              >
+                Read more
+              </button>
+            )}
           </div>
         </div>
 

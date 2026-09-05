@@ -12,6 +12,15 @@ export default function Programs() {
     )
   }
 
+  // Helper untuk menentukan path halaman detail berdasarkan judul program
+  const getProgramPath = (title) => {
+    const lowerTitle = title.toLowerCase()
+    if (lowerTitle.includes('brawijaya muda')) return '/programs/brawijayamuda'
+    if (lowerTitle.includes('east java')) return '/programs/ejcs'
+    if (lowerTitle.includes('berkelana')) return '/programs/brawijayaberkelana'
+    return null
+  }
+
   return (
     <div className="min-h-screen bg-[#001662] w-full flex justify-center">
       <div className="w-full max-w-7xl px-4 sm:px-6 md:px-8 pt-28 pb-16">
@@ -27,6 +36,7 @@ export default function Programs() {
               key={p.id} 
               {...p} 
               isLargeLogo={checkIsLargeLogo(p.title)} 
+              linkTo={getProgramPath(p.title)}
             />
           ))}
         </div>
@@ -42,6 +52,7 @@ export default function Programs() {
               key={p.id} 
               {...p} 
               isLargeLogo={checkIsLargeLogo(p.title)} 
+              linkTo={getProgramPath(p.title)}
             />
           ))}
         </div>
