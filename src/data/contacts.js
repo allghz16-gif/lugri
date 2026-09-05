@@ -1,38 +1,53 @@
-export const contacts = [
+export const contactSections = [
   {
     id: 1,
-    title: "PKS Jemy",
-    name: "Nama PIC",
-    photo: "/src/assets/images/contact/pks-jemy.jpg",
+    photo: "/images/team/pkspart.png",
+    altText: "PKS & Partnership",
+    items: [
+      {
+        title: "PKS",
+        name: "Ismy",
+        waNumber: "089677511261", // Ganti dengan nomor WhatsApp Ismy
+      },
+      {
+        title: "Partnership",
+        name: "Dea",
+        waNumber: "6281234567891", // Ganti dengan nomor WhatsApp Dea
+      },
+    ],
   },
   {
     id: 2,
-    title: "Partnership (Dea)",
-    name: "Nama PIC",
-    photo: "/src/assets/images/contact/partnership.jpg",
+    photo: "/images/team/netvitem.png",
+    altText: "Network EM & EM Vitation",
+    items: [
+      {
+        title: "Network EM",
+        name: "Revina",
+        waNumber: "6281234567892", // Ganti dengan nomor WhatsApp Revina
+      },
+      {
+        title: "EM Vitation",
+        name: "Razan",
+        waNumber: "6281234567893", // Ganti dengan nomor WhatsApp Razan
+      },
+    ],
   },
   {
     id: 3,
-    title: "Network EM (Revina)",
-    name: "Nama PIC",
-    photo: "/src/assets/images/contact/network-em.jpg",
-  },
-  {
-    id: 4,
-    title: "EM Vitation (Razavi)",
-    name: "Nama PIC",
-    photo: "/src/assets/images/contact/em-vitation.jpg",
-  },
-  {
-    id: 5,
-    title: "Media Partner Internal (Azka)",
-    name: "Nama PIC",
-    photo: "/src/assets/images/contact/media-internal.jpg",
-  },
-  {
-    id: 6,
-    title: "Media Partner Eksternal (Chandra)",
-    name: "Nama PIC",
-    photo: "/src/assets/images/contact/media-eksternal.jpg",
+    photo: "/images/team/medpart.png",
+    altText: "Media Partner",
+    items: [
+      {
+        title: "Media Partner Internal",
+        name: "Azka",
+        waNumber: "6281234567894", // Ganti dengan nomor WhatsApp Azka
+      },
+      {
+        title: "Media Partner Eksternal",
+        name: "Diandra",
+        waNumber: "6281234567895", // Ganti dengan nomor WhatsApp Diandra
+      },
+    ],
   },
 ];
