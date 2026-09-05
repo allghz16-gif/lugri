@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Users2, Landmark, X } from 'lucide-react';
 import CtaBanner from '../components/common/CtaBanner';
+import ministryTitle from '../assets/font/fontministry.png';
 
 /* ---------- Reusable 3D Tilt Card ---------- */
 function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', role, name, faculty }) {
-  // Shadow awal yang dibuat jauh lebih tebal, pekat, dan menyebar
   const defaultShadow = '0 25px 50px -12px rgba(10, 17, 40, 0.65), 0 15px 30px -8px rgba(0, 0, 0, 0.5)';
 
   const [style, setStyle] = useState({
@@ -25,7 +25,6 @@ function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', 
 
     setStyle({
       transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04,1.04,1.04)`,
-      // Dynamic Shadow yang jauh lebih tebal dan dramatis saat di-hover
       boxShadow: `${-rotateY * 3}px ${rotateX * 3 + 30}px 60px rgba(10, 17, 40, 0.8)`,
       transition: 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
     });
@@ -41,7 +40,6 @@ function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', 
 
   return (
     <div className="flex flex-col p-2">
-      {/* Container Luar: Menerima inline boxShadow dari Tilt Effect */}
       <div
         className={`relative ${rounded} cursor-pointer will-change-transform ${className}`}
         style={style}
@@ -49,9 +47,7 @@ function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', 
         onMouseLeave={handleMouseLeave}
         onClick={onClick}
       >
-        {/* Container Dalam: Memotong batas gambar agar sudut rounded presisi */}
         <div className={`w-full h-full ${rounded} overflow-hidden relative`}>
-          {/* Badge Posisi / Jabatan */}
           {role && (
             <div className="absolute top-0 left-0 bg-[#001662] text-white text-xs font-semibold px-4 py-1.5 rounded-br-xl z-10 shadow-lg">
               {role}
@@ -66,7 +62,6 @@ function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', 
         </div>
       </div>
 
-      {/* Detail Nama & Fakultas */}
       {(name || faculty) && (
         <div className="mt-3 px-1">
           {name && <h3 className="text-base font-bold text-[#0A1128] leading-tight">{name}</h3>}
@@ -147,7 +142,6 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
   return (
     <div
       ref={scrollRef}
-      /* p-6 memberikan ruang luas di sekitar gambar agar shadow tebal tidak terpotong (overflow) */
       className="flex gap-6 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none p-6"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => { setIsPaused(false); endDrag(); }}
@@ -164,7 +158,6 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
           src={src}
           alt={`${alt} ${idx + 1}`}
           draggable={false}
-          /* Custom style box-shadow kuat dan jelas */
           style={{
             boxShadow: '0 15px 30px -5px rgba(10, 17, 40, 0.35), 0 8px 15px -6px rgba(0, 0, 0, 0.25)',
           }}
@@ -198,19 +191,23 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A1128] via-[#0A1128]/60 to-transparent" />
         </div>
 
+        {/* Dekorasi kotak-kotak kecil */}
+        <div className="absolute inset-0 z-[5] pointer-events-none overflow-hidden">
+          <div className="absolute top-[8%] left-[12%] w-6 h-6 bg-[#97E614] rounded-sm rotate-3" />
+          <div className="absolute top-[10%] left-[18%] w-6 h-6 bg-gray-300/70 rounded-sm -rotate-2" />
+          <div className="absolute top-[6%] left-[45%] w-6 h-6 bg-blue-400/70 rounded-sm rotate-6" />
+          <div className="absolute top-[9%] right-[25%] w-6 h-6 bg-[#97E614] rounded-sm -rotate-3" />
+          <div className="absolute top-[5%] right-[10%] w-6 h-6 bg-gray-300/70 rounded-sm rotate-2" />
+          <div className="absolute top-[18%] right-[8%] w-5 h-5 bg-blue-400/70 rounded-sm rotate-12" />
+          <div className="absolute top-[15%] left-[8%] w-5 h-5 bg-blue-400/60 rounded-sm rotate-6" />
+        </div>
+
         <div className="relative z-10 max-w-5xl mx-auto text-center px-4 pb-8 md:pb-10">
-          <h1
-            className="text-5xl md:text-7xl lg:text-8xl uppercase leading-[0.9] text-white tracking-tight"
-            style={{
-              fontFamily: "'Stretch Pro', sans-serif",
-              fontWeight: 800,
-              WebkitTextStroke: '3px #1E3A8A',
-              textShadow: '3px 3px 0 #1E3A8A, 6px 6px 20px rgba(0,0,0,0.5)',
-            }}
-          >
-            Ministry of <br />
-            Foreign Affairs
-          </h1>
+          <img
+            src={ministryTitle}
+            alt="Ministry of Foreign Affairs"
+            className="w-full max-w-3xl mx-auto"
+          />
           <p className="text-white text-lg sm:text-xl md:text-2xl font-medium tracking-wide mt-1.5 drop-shadow-md">
             Eksekutif Mahasiswa Universitas Brawijaya 2026
           </p>
