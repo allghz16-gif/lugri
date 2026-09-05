@@ -169,8 +169,8 @@ export default function BrawijayaMuda() {
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
           <div className="w-full md:w-1/3 flex flex-col justify-between">
             <div>
-              <div className="bg-[#001662] rounded-xl px-6 py-3 mb-4 inline-block">
-                <h1 className="text-[#97E614] font-bold text-xl md:text-2xl tracking-wide">
+              <div className="bg-[#001662] rounded-2xl w-full px-6 py-4 mb-4">
+                <h1 className="text-[#97E614] font-extrabold text-2xl sm:text-3xl tracking-wider uppercase">
                   Brawijaya Muda
                 </h1>
               </div>
@@ -188,12 +188,12 @@ export default function BrawijayaMuda() {
           </div>
         </div>
 
-        {/* SECTION 2: DETAIL PROGRAM & TUJUAN (PERSIS GAMBAR + DOTS SCROLL) */}
+        {/* SECTION 2: DETAIL PROGRAM & TUJUAN */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
           <div className="w-full md:w-1/3 flex flex-col justify-between">
             <div>
-              <div className="bg-[#001662] rounded-xl px-6 py-3 mb-2 inline-block">
-                <h2 className="text-[#97E614] font-bold text-xl md:text-2xl tracking-wide">
+              <div className="bg-[#001662] rounded-2xl w-full px-6 py-4 mb-2">
+                <h2 className="text-[#97E614] font-extrabold text-2xl sm:text-3xl tracking-wider uppercase">
                   Detail Program
                 </h2>
               </div>
@@ -254,8 +254,8 @@ export default function BrawijayaMuda() {
         {/* SECTION 3: PROGRAM ACTIVITIES */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col items-center">
           <div className="w-full text-center mb-8">
-            <div className="bg-[#001662] rounded-2xl w-full py-3 mb-2">
-              <h2 className="text-[#97E614] font-bold text-xl md:text-2xl tracking-wide">
+            <div className="bg-[#001662] rounded-2xl w-full px-6 py-4 mb-2">
+              <h2 className="text-[#97E614] font-extrabold text-2xl sm:text-3xl tracking-wider uppercase">
                 Program Activities
               </h2>
             </div>
@@ -304,8 +304,8 @@ export default function BrawijayaMuda() {
         {/* SECTION 4: DOKUMENTASI KEGIATAN */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col">
           <div className="w-full text-center mb-6">
-            <div className="bg-[#001662] rounded-2xl w-full py-3">
-              <h2 className="text-[#97E614] font-bold text-xl md:text-2xl tracking-wide">
+            <div className="bg-[#001662] rounded-2xl w-full px-6 py-4">
+              <h2 className="text-[#97E614] font-extrabold text-2xl sm:text-3xl tracking-wider uppercase">
                 Dokumentasi Kegiatan
               </h2>
             </div>
