@@ -4,15 +4,23 @@ export default function IntroAnimation({ onComplete }) {
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
+    // Kunci scroll body selama intro tampil
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const timer = setTimeout(() => {
       handleFinish();
     }, 5500);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = originalOverflow;
+    };
   }, []);
 
   const handleFinish = () => {
     setIsExiting(true);
+    document.body.style.overflow = ''; // buka kembali scroll saat intro mulai fade-out
     setTimeout(() => {
       if (onComplete) onComplete();
     }, 500);

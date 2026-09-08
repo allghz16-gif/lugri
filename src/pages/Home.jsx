@@ -5,7 +5,8 @@ import ministryTitle from '../assets/font/fontministry.png';
 
 /* ---------- Reusable 3D Tilt Card ---------- */
 function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', role, name, faculty }) {
-  const defaultShadow = '0 25px 50px -12px rgba(10, 17, 40, 0.65), 0 15px 30px -8px rgba(0, 0, 0, 0.5)';
+  // Shadow dibuat jauh lebih soft/tipis
+  const defaultShadow = '0 10px 25px -5px rgba(10, 17, 40, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08)';
 
   const [style, setStyle] = useState({
     transform: 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)',
@@ -25,7 +26,8 @@ function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', 
 
     setStyle({
       transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04,1.04,1.04)`,
-      boxShadow: `${-rotateY * 3}px ${rotateX * 3 + 30}px 60px rgba(10, 17, 40, 0.8)`,
+      // Shadow saat di-hover dikurangi kepekatannya
+      boxShadow: `${-rotateY * 2}px ${rotateX * 2 + 15}px 30px rgba(10, 17, 40, 0.2)`,
       transition: 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
     });
   };
@@ -49,7 +51,7 @@ function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', 
       >
         <div className={`w-full h-full ${rounded} overflow-hidden relative`}>
           {role && (
-            <div className="absolute top-0 left-0 bg-[#001662] text-white text-xs font-semibold px-4 py-1.5 rounded-br-xl z-10 shadow-lg">
+            <div className="absolute top-0 left-0 bg-[#001662] text-white text-xs font-semibold px-4 py-1.5 rounded-br-xl z-10 shadow-sm">
               {role}
             </div>
           )}
@@ -159,7 +161,8 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
           alt={`${alt} ${idx + 1}`}
           draggable={false}
           style={{
-            boxShadow: '0 15px 30px -5px rgba(10, 17, 40, 0.35), 0 8px 15px -6px rgba(0, 0, 0, 0.25)',
+            // Shadow gambar carousel juga dibuat lebih soft
+            boxShadow: '0 8px 18px -4px rgba(10, 17, 40, 0.12), 0 4px 8px -4px rgba(0, 0, 0, 0.08)',
           }}
           className="h-72 md:h-80 w-auto rounded-2xl flex-shrink-0 pointer-events-auto transition-all duration-300 hover:scale-105 hover:-translate-y-1"
           onClick={() => handleImageClick(src)}

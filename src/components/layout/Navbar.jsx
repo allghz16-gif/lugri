@@ -21,13 +21,15 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-6 left-0 right-0 z-50 px-4 md:px-8 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between gap-4">
-        
-        {/* KAPSUL KIRI: OUTER PUTIH BLUR + INNER BIRU */}
-        <div className="p-1.5 bg-white/20 backdrop-blur-md border border-white/40 rounded-full shadow-2xl">
+      {/* WADAH UTAMA SATU KAPSUL (OUTER BLUR) */}
+      <div className="p-1.5 bg-white/20 backdrop-blur-md border border-white/40 rounded-full shadow-2xl">
+        {/* INNER CONTAINER BIRU SATU BARIS */}
+        <div className="bg-[#2B3970] rounded-full px-4 sm:px-6 py-2 flex items-center justify-between gap-4">
+          
+          {/* SISI KIRI: BRAND & LOGO */}
           <Link 
             to="/" 
-            className="bg-[#2B3970] rounded-full px-5 py-2 flex items-center gap-3 min-w-0"
+            className="flex items-center gap-3 min-w-0"
           >
             <div className="flex items-center gap-2 shrink-0">
               <img 
@@ -56,11 +58,9 @@ export default function Navbar() {
               </span>
             </div>
           </Link>
-        </div>
 
-        {/* KAPSUL KANAN: OUTER PUTIH BLUR + INNER BIRU (DESKTOP) */}
-        <div className="hidden md:block p-1.5 bg-white/20 backdrop-blur-md border border-white/40 rounded-full shadow-2xl">
-          <nav className="bg-[#2B3970] rounded-full px-7 py-2 flex items-center gap-8">
+          {/* SISI KANAN: MENU DESKTOP */}
+          <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link 
                 key={link.name}
@@ -82,22 +82,22 @@ export default function Navbar() {
               Contact us
             </Link>
           </nav>
-        </div>
 
-        {/* HAMBURGER MOBILE */}
-        <div className="md:hidden p-1.5 bg-white/20 backdrop-blur-md border border-white/40 rounded-2xl shadow-2xl">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="bg-[#2B3970] text-white p-2.5 rounded-xl hover:text-[#97E614] transition-colors focus:outline-none flex items-center justify-center"
-            aria-label="Toggle Menu"
-          >
-            {isOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
+          {/* HAMBURGER MOBILE */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-white p-1.5 hover:text-[#97E614] transition-colors focus:outline-none"
+              aria-label="Toggle Menu"
+            >
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
 
+        </div>
       </div>
 
-      {/* DROPDOWN MOBILE WITH DOUBLE LAYER */}
+      {/* DROPDOWN MOBILE */}
       {isOpen && (
         <div className="md:hidden mt-3 p-1.5 bg-white/20 backdrop-blur-md border border-white/40 rounded-3xl shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="bg-[#2B3970] rounded-2xl p-4 flex flex-col gap-2.5">
