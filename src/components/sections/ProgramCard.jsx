@@ -51,24 +51,17 @@ export default function ProgramCard({ title, icon, photo, desc, linkTo }) {
             </div>
           </div>
 
-          {/* Tombol Read More (Diperbaiki agar clickable) */}
-          <div className="mt-6 sm:mt-4 relative z-10">
-            {linkTo ? (
+          {/* Tombol Read More (Hanya muncul jika linkTo bernilai/ada) */}
+          {linkTo ? (
+            <div className="mt-6 sm:mt-4 relative z-10">
               <Link
                 to={linkTo}
                 className="inline-block bg-[#001662] text-[#97E614] text-sm md:text-base font-semibold px-6 py-2.5 rounded-xl hover:bg-[#000f45] transition shadow-md cursor-pointer pointer-events-auto"
               >
                 Read more
               </Link>
-            ) : (
-              <button
-                type="button"
-                className="bg-[#001662] text-[#97E614] text-sm md:text-base font-semibold px-6 py-2.5 rounded-xl hover:bg-[#000f45] transition shadow-md cursor-pointer pointer-events-auto"
-              >
-                Read more
-              </button>
-            )}
-          </div>
+            </div>
+          ) : null}
         </div>
 
         {/* KOLOM KANAN: Poster */}

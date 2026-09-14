@@ -7,22 +7,22 @@ export default function ContactCard({ items, photo, altText }) {
       <div className="flex-1 space-y-6 w-full pt-2">
         {items.map((contact, index) => (
           <div key={index} className="flex flex-col items-start gap-2">
-            {/* Box Header Judul & Nama PIC - Uppercase */}
-            <div className="bg-[#001662] px-6 py-2.5 rounded-2xl w-full max-w-x10 shadow-md overflow-hidden">
+            {/* Box Header Judul & Nama PIC */}
+            <div className="bg-[#001662] px-6 py-2.5 rounded-2xl w-full max-w-xl shadow-md overflow-hidden">
               <h3 
-                className="text-[#97E614] text-base md:text-lg font-[900] tracking-wider uppercase inline-block origin-left transform scale-x-110"
+                className="text-[#97E614] text-base md:text-lg font-black tracking-widest uppercase"
                 style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Arial Black', sans-serif" }}
               >
-                {contact.title} <span className="font-[900] text-[#97E614]">({contact.name})</span>
+                {contact.title} <span className="font-black text-[#97E614]">({contact.name})</span>
               </h3>
             </div>
 
-            {/* Tombol Contact - Uppercase */}
+            {/* Tombol Contact */}
             <a
               href={`https://wa.me/${contact.waNumber}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-[#97E614] hover:bg-[#83cb10] text-[#001662] font-[900] text-xs md:text-sm px-5 py-2.5 rounded-xl uppercase shadow-sm transition-all duration-200 active:scale-95 origin-left transform scale-x-105"
+              className="inline-block bg-[#97E614] hover:bg-[#83cb10] text-[#001662] font-black text-xs md:text-sm px-6 py-2.5 rounded-xl uppercase shadow-sm transition-all duration-200 active:scale-95 origin-left"
               style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Arial Black', sans-serif" }}
             >
               Contact

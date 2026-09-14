@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import CtaBanner from '../components/common/CtaBanner';
 
 /* ---------- Draggable + Auto-scrolling Image Carousel ---------- */
@@ -145,13 +146,13 @@ export default function EastJavaCollaborationSummit() {
     });
   };
 
-  // Program Activities sesuai format: talkshow.png, pbc.png
+  // Program Activities
   const programActivities = [
     { title: 'Talkshow', image: '/images/team/talkshow.png' },
     { title: 'Policy Brief Contest', image: '/images/team/pbc.png' }
   ];
 
-  // 14 Dokumentasi Kegiatan (ejcs1.png s/d ejcs14.png)
+  // 14 Dokumentasi Kegiatan
   const dokumentasiList = Array.from(
     { length: 14 },
     (_, i) => `/images/team/ejcs${i + 1}.png`
@@ -162,7 +163,12 @@ export default function EastJavaCollaborationSummit() {
       <div className="w-full max-w-7xl px-4 sm:px-6 md:px-8 pt-28 pb-16 space-y-10">
 
         {/* SECTION 1: HERO / BANNER UTAMA */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch"
+        >
           <div className="w-full md:w-1/3 flex flex-col justify-between">
             <div>
               <div className="bg-[#001662] rounded-2xl w-full px-6 py-4 mb-4">
@@ -182,10 +188,16 @@ export default function EastJavaCollaborationSummit() {
               className="w-full h-full object-cover rounded-2xl"
             />
           </div>
-        </div>
+        </motion.div>
 
-        {/* SECTION 2: DETAIL PROGRAM & TUJUAN (CAROUSEL + DOTS INDIKATOR) */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
+        {/* SECTION 2: DETAIL PROGRAM & TUJUAN */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch"
+        >
           <div className="w-full md:w-1/3 flex flex-col justify-between">
             <div>
               <div className="bg-[#001662] rounded-2xl w-full px-6 py-4 mb-2">
@@ -245,10 +257,16 @@ export default function EastJavaCollaborationSummit() {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* SECTION 3: PROGRAM ACTIVITIES */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col items-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col items-center"
+        >
           <div className="w-full text-center mb-8">
             <div className="bg-[#001662] rounded-2xl w-full px-6 py-4 mb-2">
               <h2 className="text-[#97E614] font-extrabold text-2xl sm:text-3xl tracking-wider uppercase">
@@ -278,10 +296,16 @@ export default function EastJavaCollaborationSummit() {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* SECTION 4: DOKUMENTASI KEGIATAN */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col"
+        >
           <div className="w-full text-center mb-6">
             <div className="bg-[#001662] rounded-2xl w-full px-6 py-4">
               <h2 className="text-[#97E614] font-extrabold text-2xl sm:text-3xl tracking-wider uppercase">
@@ -295,7 +319,7 @@ export default function EastJavaCollaborationSummit() {
             alt="Dokumentasi East Java Collaboration Summit"
             onImageClick={(src) => setSelectedImage(src)}
           />
-        </div>
+        </motion.div>
 
         {/* SECTION 5: CTA BANNER */}
         <CtaBanner />

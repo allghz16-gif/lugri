@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import CtaBanner from '../components/common/CtaBanner';
 
-/* ---------- Draggable + Auto-scrolling Image Carousel ---------- */
 function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
   const scrollRef = useRef(null);
   const isDragging = useRef(false);
@@ -14,9 +14,7 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    if (reverse) {
-      el.scrollLeft = el.scrollWidth / 2;
-    }
+    if (reverse) el.scrollLeft = el.scrollWidth / 2;
   }, [reverse]);
 
   useEffect(() => {
@@ -29,14 +27,10 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
       if (!isPaused && !isDragging.current && el) {
         if (reverse) {
           el.scrollLeft -= speed;
-          if (el.scrollLeft <= 0) {
-            el.scrollLeft = el.scrollWidth / 2;
-          }
+          if (el.scrollLeft <= 0) el.scrollLeft = el.scrollWidth / 2;
         } else {
           el.scrollLeft += speed;
-          if (el.scrollLeft >= el.scrollWidth / 2) {
-            el.scrollLeft = 0;
-          }
+          if (el.scrollLeft >= el.scrollWidth / 2) el.scrollLeft = 0;
         }
       }
       rafId = requestAnimationFrame(step);
@@ -60,9 +54,7 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
     scrollRef.current.scrollLeft = startScrollLeft.current - walk;
   };
 
-  const endDrag = () => {
-    isDragging.current = false;
-  };
+  const endDrag = () => { isDragging.current = false; };
 
   const handleImageClick = (src) => {
     if (!hasDragged.current && onImageClick) onImageClick(src);
@@ -105,7 +97,6 @@ export default function BrawijayaBerkelana() {
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const detailScrollRef = useRef(null);
 
-  // Data 3 Card Slide Detail Program Brawijaya Berkelana
   const detailProgramCards = [
     {
       title: 'Sasaran',
@@ -114,19 +105,16 @@ export default function BrawijayaBerkelana() {
     },
     {
       title: 'Tujuan Program',
-      description:
-        'Meningkatkan kapasitas intelektual dan pemikiran kritis mahasiswa melalui keterlibatan aktif dalam jejaring, forum, serta pertukaran gagasan dengan berbagai institusi strategis, sekaligus membangun dan memperkuat kemitraan kolaboratif berkelanjutan.',
+      description: 'Meningkatkan kapasitas intelektual dan pemikiran kritis mahasiswa melalui keterlibatan aktif dalam jejaring, forum, serta pertukaran gagasan dengan berbagai institusi strategis, sekaligus membangun dan memperkuat kemitraan kolaboratif berkelanjutan.',
       image: '/images/team/bbke2.png',
     },
     {
       title: 'Manfaat Bergabung',
-      description:
-        'Terbentuknya pengalaman melalui eksplorasi dan interaksi langsung di tempat visitasi juga diperolehnya wawasan mengenai dunia kerja dan kebutuhan industri dari kunjungan perusahaan.',
+      description: 'Terbentuknya pengalaman melalui eksplorasi dan interaksi langsung di tempat visitasi juga diperolehnya wawasan mengenai dunia kerja dan kebutuhan industri dari kunjungan perusahaan.',
       image: '/images/team/manfaatbb.png',
     },
   ];
 
-  // Handler Scroll untuk deteksi index card aktif
   const handleDetailScroll = () => {
     const el = detailScrollRef.current;
     if (!el) return;
@@ -135,17 +123,12 @@ export default function BrawijayaBerkelana() {
     setActiveCardIndex(index);
   };
 
-  // Handler click dot indikator
   const scrollToCard = (index) => {
     const el = detailScrollRef.current;
     if (!el) return;
-    el.scrollTo({
-      left: index * el.clientWidth,
-      behavior: 'smooth',
-    });
+    el.scrollTo({ left: index * el.clientWidth, behavior: 'smooth' });
   };
 
-  // 5 Program Activities untuk Brawijaya Berkelana
   const programActivities = [
     { title: 'Company Visit', image: '/images/team/cv.png' },
     { title: 'Government Visit', image: '/images/team/GV.png' },
@@ -154,18 +137,19 @@ export default function BrawijayaBerkelana() {
     { title: 'P-R24', image: '/images/team/P-R24.png' }
   ];
 
-  // 15 Dokumentasi Kegiatan (bb1.png s/d bb15.png)
-  const dokumentasiList = Array.from(
-    { length: 15 },
-    (_, i) => `/images/team/bb${i + 1}.png`
-  );
+  const dokumentasiList = Array.from({ length: 15 }, (_, i) => `/images/team/bb${i + 1}.png`);
 
   return (
     <div className="min-h-screen bg-[#001662] w-full flex justify-center">
       <div className="w-full max-w-7xl px-4 sm:px-6 md:px-8 pt-28 pb-16 space-y-10">
 
-        {/* SECTION 1: HERO / BANNER UTAMA */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
+        {/* SECTION 1: HERO */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch"
+        >
           <div className="w-full md:w-1/3 flex flex-col justify-between">
             <div>
               <div className="bg-[#001662] rounded-2xl w-full px-6 py-4 mb-4">
@@ -185,10 +169,16 @@ export default function BrawijayaBerkelana() {
               className="w-full h-full object-cover rounded-2xl"
             />
           </div>
-        </div>
+        </motion.div>
 
-        {/* SECTION 2: DETAIL PROGRAM & TUJUAN (CAROUSEL + DOTS INDIKATOR) */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
+        {/* SECTION 2: DETAIL PROGRAM */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch"
+        >
           <div className="w-full md:w-1/3 flex flex-col justify-between">
             <div>
               <div className="bg-[#001662] rounded-2xl w-full px-6 py-4 mb-2">
@@ -203,7 +193,6 @@ export default function BrawijayaBerkelana() {
           </div>
 
           <div className="w-full md:w-2/3 flex flex-col items-center">
-            {/* Scrollable Container Card Hijau */}
             <div
               ref={detailScrollRef}
               onScroll={handleDetailScroll}
@@ -232,7 +221,6 @@ export default function BrawijayaBerkelana() {
               ))}
             </div>
 
-            {/* Indikator Titik-titik (Dots) */}
             <div className="flex items-center justify-center gap-2 mt-4">
               {detailProgramCards.map((_, idx) => (
                 <button
@@ -248,62 +236,58 @@ export default function BrawijayaBerkelana() {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* SECTION 3: PROGRAM ACTIVITIES */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col items-center"
+        >
           <div className="w-full text-center mb-8">
             <div className="bg-[#001662] rounded-2xl w-full px-6 py-4 mb-2">
               <h2 className="text-[#97E614] font-extrabold text-2xl sm:text-3xl tracking-wider uppercase">
                 Program Activities
               </h2>
             </div>
-            <p className="text-slate-600 text-sm">
-              Kegiatan utama selama periode program
-            </p>
+            <p className="text-slate-600 text-sm">Kegiatan utama selama periode program</p>
           </div>
 
           <div className="w-full flex flex-col gap-6 items-center">
-            {/* Baris Pertama: 3 Kartu (CV, GV, UV) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl justify-items-center">
               {programActivities.slice(0, 3).map((act, index) => (
                 <div key={index} className="flex flex-col items-center text-center w-full max-w-[280px]">
                   <div className="w-full aspect-square rounded-2xl overflow-hidden shadow-md mb-3">
-                    <img
-                      src={act.image}
-                      alt={act.title}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={act.image} alt={act.title} className="w-full h-full object-cover" />
                   </div>
-                  <span className="text-sm font-semibold text-slate-800 leading-tight">
-                    {act.title}
-                  </span>
+                  <span className="text-sm font-semibold text-slate-800 leading-tight">{act.title}</span>
                 </div>
               ))}
             </div>
 
-            {/* Baris Kedua: 2 Kartu (CT, P-R24) */}
             <div className="flex flex-wrap justify-center gap-6 w-full max-w-5xl">
               {programActivities.slice(3, 5).map((act, index) => (
                 <div key={index} className="flex flex-col items-center text-center w-full max-w-[280px]">
                   <div className="w-full aspect-square rounded-2xl overflow-hidden shadow-md mb-3">
-                    <img
-                      src={act.image}
-                      alt={act.title}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={act.image} alt={act.title} className="w-full h-full object-cover" />
                   </div>
-                  <span className="text-sm font-semibold text-slate-800 leading-tight">
-                    {act.title}
-                  </span>
+                  <span className="text-sm font-semibold text-slate-800 leading-tight">{act.title}</span>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* SECTION 4: DOKUMENTASI KEGIATAN */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col">
+        {/* SECTION 4: DOKUMENTASI */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col"
+        >
           <div className="w-full text-center mb-6">
             <div className="bg-[#001662] rounded-2xl w-full px-6 py-4">
               <h2 className="text-[#97E614] font-extrabold text-2xl sm:text-3xl tracking-wider uppercase">
@@ -317,14 +301,12 @@ export default function BrawijayaBerkelana() {
             alt="Dokumentasi Brawijaya Berkelana"
             onImageClick={(src) => setSelectedImage(src)}
           />
-        </div>
+        </motion.div>
 
-        {/* SECTION 5: CTA BANNER */}
         <CtaBanner />
 
       </div>
 
-      {/* LIGHTBOX POPUP UNTUK DOKUMENTASI */}
       {selectedImage && (
         <div
           className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"

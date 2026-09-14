@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Users2, Landmark, X } from 'lucide-react';
 import CtaBanner from '../components/common/CtaBanner';
 import ministryTitle from '../assets/font/fontministry.png';
 
 /* ---------- Reusable 3D Tilt Card ---------- */
 function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', role, name, faculty }) {
-  // Shadow dibuat jauh lebih soft/tipis
   const defaultShadow = '0 10px 25px -5px rgba(10, 17, 40, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08)';
 
   const [style, setStyle] = useState({
@@ -26,7 +26,6 @@ function TiltCard({ src, alt, onClick, className = '', rounded = 'rounded-2xl', 
 
     setStyle({
       transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04,1.04,1.04)`,
-      // Shadow saat di-hover dikurangi kepekatannya
       boxShadow: `${-rotateY * 2}px ${rotateX * 2 + 15}px 30px rgba(10, 17, 40, 0.2)`,
       transition: 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
     });
@@ -161,7 +160,6 @@ function ImageCarousel({ images, alt, onImageClick, reverse = false }) {
           alt={`${alt} ${idx + 1}`}
           draggable={false}
           style={{
-            // Shadow gambar carousel juga dibuat lebih soft
             boxShadow: '0 8px 18px -4px rgba(10, 17, 40, 0.12), 0 4px 8px -4px rgba(0, 0, 0, 0.08)',
           }}
           className="h-72 md:h-80 w-auto rounded-2xl flex-shrink-0 pointer-events-auto transition-all duration-300 hover:scale-105 hover:-translate-y-1"
@@ -184,7 +182,12 @@ export default function Home() {
     <div className="bg-white min-h-screen text-gray-900 font-sans overflow-x-hidden">
 
       {/* 1. HERO SECTION */}
-      <section className="relative mx-3 sm:mx-6 md:mx-10 mt-4 rounded-3xl min-h-[500px] md:min-h-[580px] flex items-end justify-center overflow-hidden shadow-2xl">
+      <motion.section 
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="relative mx-3 sm:mx-6 md:mx-10 mt-4 rounded-3xl min-h-[500px] md:min-h-[580px] flex items-end justify-center overflow-hidden shadow-2xl"
+      >
         <div className="absolute inset-0 z-0">
           <img
             src="/images/team/bersamalugri.jpeg"
@@ -215,14 +218,20 @@ export default function Home() {
             Eksekutif Mahasiswa Universitas Brawijaya 2026
           </p>
         </div>
-      </section>
+      </motion.section>
 
       <div className="h-16" />
 
       <div className="pb-12 px-4 md:px-12 space-y-16">
 
         {/* 2. OUR ROLE AND VISION SECTION */}
-        <section className="max-w-6xl mx-auto">
+        <motion.section 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-6xl mx-auto"
+        >
           <h2 className="text-2xl font-bold text-[#0A1128]">Our Role and Vision</h2>
           <p className="text-gray-500 text-sm mb-8">Empowering Students in Foreign Affairs</p>
 
@@ -251,10 +260,16 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 3. ORGANIZATIONAL STRUCTURE SECTION */}
-        <section className="max-w-6xl mx-auto space-y-10">
+        <motion.section 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-6xl mx-auto space-y-10"
+        >
           <div className="border-b border-gray-200 pb-3">
             <h2 className="text-lg font-bold uppercase tracking-wider text-[#0A1128]">
               Organizational Structure
@@ -350,7 +365,7 @@ export default function Home() {
             />
           </div>
 
-        </section>
+        </motion.section>
 
       </div>
 

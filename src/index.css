@@ -1,3 +1,4 @@
+/* 1. Font Custom (Stretch Pro) */
 @font-face {
   font-family: 'Stretch Pro';
   src: url('/fonts/StretchPro.ttf') format('truetype');
@@ -5,8 +6,20 @@
   font-style: normal;
 }
 
+/* 2. Import Tailwind CSS (v4) */
 @import "tailwindcss";
 
-body {
-  background-color: #001662;
+/* 3. Base & Global Utility Settings */
+@layer base {
+  body {
+    background-color: #001662;
+    color: #ffffff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* 4. Font Utility Class (Jika ingin dipakai di Tailwind) */
+.font-stretch {
+  font-family: 'Stretch Pro', sans-serif;
 }
