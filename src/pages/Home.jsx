@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Users2, Landmark, X } from 'lucide-react';
 import CtaBanner from '../components/common/CtaBanner';
 import ministryTitle from '../assets/font/fontministry.png';
-import API from '../../api';
+import API from '../api';
 
 /* ---------- Wish Board Section (Connected to Express API via Netlify) ---------- */
 function WishBoardSection() {
