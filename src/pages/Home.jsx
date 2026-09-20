@@ -19,27 +19,27 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Sebar 5 zona posisi awal murni terbagi rata dari Kiri (2%) sampai Kanan (82%)
+        // Sebar 5 zona posisi dari Kiri (2%) sampai Kanan (82%)
         const zones = [
-          { min: 2, max: 14 },   // Zona 1 (Paling Kiri)
+          { min: 2, max: 14 },   // Zona 1
           { min: 18, max: 32 },  // Zona 2
-          { min: 36, max: 48 },  // Zona 3 (Tengah)
+          { min: 36, max: 48 },  // Zona 3
           { min: 52, max: 66 },  // Zona 4
-          { min: 70, max: 82 }   // Zona 5 (Paling Kanan)
+          { min: 70, max: 82 }   // Zona 5
         ];
 
         const formattedData = data.map((item, index) => {
           const zone = zones[index % zones.length];
           const randomX = Math.floor(Math.random() * (zone.max - zone.min + 1)) + zone.min;
           
-          // Durasi melayang vertikal (Y) acak (10 - 15 detik)
-          const duration = Math.floor(Math.random() * 6) + 10;
+          // DURASI DIPERPANJANG BANYAK (18 - 28 detik) supaya melayangnya super pelan
+          const duration = 18 + Math.floor(Math.random() * 10);
           
-          // Delay jeda start antar kartu
-          const delay = (index % 6) * 1.8 + Math.random() * 0.8;
+          // Delay pembuka agak renggang supaya ga barengan
+          const delay = (index % 6) * 2.5 + Math.random() * 1.2;
 
-          // Jarak geser lurus horizontal (tanpa goyang/miring)
-          const swayDistance = 25 + (index % 3) * 10; // 25px - 45px
+          // Jarak geser horizontal halus
+          const swayDistance = 20 + (index % 3) * 8; // 20px - 36px
           const direction = index % 2 === 0 ? 1 : -1;
 
           return {
@@ -48,7 +48,7 @@ function WishBoardSection() {
             duration,
             delay,
             swayDistance: swayDistance * direction,
-            swayDuration: 4 + (index % 3) * 1, // 4s - 6s
+            swayDuration: 6 + (index % 3) * 1.5, // 6s - 9s (geser kanan kiri sangat lembut)
           };
         });
 
@@ -89,7 +89,7 @@ function WishBoardSection() {
   return (
     <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS (MURNI GESER KANAN-KIRI LURUS PERLAHAN) */}
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS (PERLAHAN & SUPER SLOW) */}
       <div className="absolute left-0 right-0 w-full -top-64 bottom-0 pointer-events-none z-10 overflow-visible">
         <AnimatePresence>
           {!loading &&
@@ -99,29 +99,32 @@ function WishBoardSection() {
                 initial={{ y: 230, opacity: 0, x: -item.swayDistance }}
                 animate={{
                   y: -180,
-                  // Murni bergeser horizontal lurus tanpa rotasi miring
                   x: [item.swayDistance, -item.swayDistance, item.swayDistance],
-                  opacity: [0, 1, 1, 0.4, 0],
+                  // Fade in lembut di awal, nampak jelas di tengah, fade out perlahan di atas
+                  opacity: [0, 0.9, 0.9, 0],
                 }}
                 transition={{
+                  // Animasi Naik Vertikal (Y) dibuat Sangat Pelan
                   y: {
-                    duration: item.duration || 12,
+                    duration: item.duration || 22,
                     repeat: Infinity,
                     ease: 'linear',
                     delay: item.delay || 0,
                   },
-                  // Gerakan geser lurus horizontal yang stabil dan lembut
+                  // Animasi Geser Kanan-Kiri (X) yang Super Smooth
                   x: {
-                    duration: item.swayDuration || 5,
+                    duration: item.swayDuration || 7,
                     repeat: Infinity,
                     repeatType: 'mirror',
                     ease: 'easeInOut',
                     delay: (item.delay || 0) * 0.3,
                   },
+                  // Opacity Muncul Perlahan
                   opacity: {
-                    duration: item.duration || 12,
+                    duration: item.duration || 22,
+                    times: [0, 0.15, 0.85, 1], // 15% durasi awal untuk fade in perlahan
                     repeat: Infinity,
-                    ease: 'linear',
+                    ease: 'easeInOut',
                     delay: item.delay || 0,
                   },
                 }}
