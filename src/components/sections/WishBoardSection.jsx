@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send } from 'lucide-react';
-import API from '../api';
 
 export default function WishBoardSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
