@@ -5,16 +5,6 @@ function WishBoardSection() {
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fungsi helper untuk menghasilkan angka acak stabil berdasarkan string (ID/Teks)
-  const getRandomFromHash = (str, min, max) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const positiveHash = Math.abs(hash);
-    return min + (positiveHash % (max - min + 1));
-  };
-
   // 1. Ambil data harapan dari MySQL via Netlify Backend
   const fetchWishes = async () => {
     try {
@@ -22,21 +12,35 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
+        // Pembagian Zona Kolom Kiri ke Kanan:
+        // Zone 0: 2% - 15% (Sisi Paling Kiri)
+        // Zone 1: 18% - 32% (Tengah Kiri)
+        // Zone 2: 35% - 48% (Tengah)
+        // Zone 3: 52% - 65% (Tengah Kanan)
+        // Zone 4: 68% - 80% (Sisi Paling Kanan)
+        const zones = [
+          { min: 2, max: 15 },
+          { min: 18, max: 32 },
+          { min: 35, max: 48 },
+          { min: 52, max: 65 },
+          { min: 68, max: 80 }
+        ];
+
         const formattedData = data.map((item, index) => {
-          const uniqueSeed = item.id || item._id || item.text || index.toString();
+          // Pilih zona berdasarkan urutan index agar terbagi rata 5 kolom
+          const zoneObj = zones[index % zones.length];
           
-          // Sebar posisi horizontal acak dari 3% sampai 75%
-          const xPos = `${getRandomFromHash(uniqueSeed + 'x', 3, 75)}%`;
-          
-          // Durasi animasi bervariasi (7 sampai 13 detik) agar tidak melayang barengan
-          const duration = getRandomFromHash(uniqueSeed + 'dur', 8, 14);
-          
-          // Delay bertingkat
-          const delay = (index % 7) * 1.8;
+          // Hitung nilai acak di dalam rentang zona tersebut
+          const randomOffset = Math.floor(Math.random() * (zoneObj.max - zoneObj.min + 1));
+          const calculatedPos = `${zoneObj.min + randomOffset}%`;
+
+          // Kecepatan & delay bervariasi
+          const duration = 8 + (index % 5) * 1.5; // 8s - 14s
+          const delay = (index % 6) * 1.8;
 
           return {
             ...item,
-            xPos,
+            xPos: calculatedPos,
             duration,
             delay,
           };
@@ -78,7 +82,7 @@ function WishBoardSection() {
   return (
     <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS */}
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS (TERSEBAR LENGKAP KIRI SAMPAI KANAN) */}
       <div className="absolute left-0 right-0 w-full -top-64 bottom-0 pointer-events-none z-10 overflow-visible">
         <AnimatePresence>
           {!loading &&
@@ -87,7 +91,7 @@ function WishBoardSection() {
                 key={item.id || item._id || item.text}
                 initial={{ y: 200, opacity: 0 }}
                 animate={{
-                  y: -140,
+                  y: -150,
                   opacity: [0, 1, 1, 0.3, 0],
                 }}
                 transition={{
@@ -97,7 +101,7 @@ function WishBoardSection() {
                   delay: item.delay || 0,
                 }}
                 style={{ left: item.xPos }}
-                className="absolute w-fit max-w-[220px] sm:max-w-[300px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
+                className="absolute w-fit max-w-[200px] sm:max-w-[280px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
               >
                 <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">
                   "{item.text}"
