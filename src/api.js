@@ -1,3 +1,4 @@
+
 const express = require('express');
 const serverless = require('serverless-http');
 require('dotenv').config();
@@ -7,7 +8,7 @@ const app = express();
 // CORS manual — pastikan domain ditulis persis
 app.use((req, res, next) => {
   const allowedOrigins = [
-    'https://kemenlugri-emub.vercel.app',
+    'https://kemenlugri-emub.vercel.app/api',
     'http://localhost:5173',
   ];
   const origin = req.headers.origin;
