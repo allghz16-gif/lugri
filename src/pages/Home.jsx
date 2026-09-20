@@ -19,10 +19,10 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Generasikan xPos persentase terdistribusi (dari zona 5% sampai 75%)
+        // Generasikan xPos persentase terdistribusi (dari zona 5% sampai 80% lebar layar)
         const formattedData = data.map((item, index) => ({
           ...item,
-          xPos: `${(index % 4) * 20 + 5}%`,
+          xPos: `${(index % 5) * 18 + 5}%`,
           delay: index * 1.5,
         }));
         setWishes(formattedData);
@@ -60,10 +60,10 @@ function WishBoardSection() {
   };
 
   return (
-    <section className="relative mx-3 sm:mx-6 md:mx-10 my-8 flex items-center justify-center min-h-[120px] overflow-visible">
+    <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS */}
-      <div className="absolute inset-x-0 -top-48 bottom-0 pointer-events-none w-full">
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS (SELEBAR SELURUH LAYAR MONITOR) */}
+      <div className="absolute left-0 right-0 w-full -top-48 bottom-0 pointer-events-none z-10">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
@@ -80,8 +80,8 @@ function WishBoardSection() {
                   ease: 'easeInOut',
                   delay: item.delay || 0,
                 }}
-                style={{ left: item.xPos }} // Dipasang via inline style agar persentase dibaca penuh dari kiri ke kanan
-                className="absolute max-w-[260px] sm:max-w-[340px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto z-10 border border-white/20"
+                style={{ left: item.xPos }}
+                className="absolute max-w-[260px] sm:max-w-[340px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
               >
                 <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">
                   "{item.text}"
@@ -92,17 +92,19 @@ function WishBoardSection() {
       </div>
 
       {/* TOMBOL BERI HARAPAN MEMANJANG (#001662) */}
-      <motion.button
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
-        onClick={() => setIsModalOpen(true)}
-        style={{
-          boxShadow: '0 10px 25px -5px rgba(0, 22, 98, 0.5), 0 0 15px rgba(0, 22, 98, 0.3)',
-        }}
-        className="relative z-20 w-full bg-[#001662] hover:bg-[#0A1128] text-white font-black text-base sm:text-xl md:text-2xl py-5 rounded-3xl uppercase tracking-wider transition duration-300 cursor-pointer border border-white/30 text-center flex items-center justify-center gap-3 shadow-2xl"
-      >
-        <span>BERI HARAPAN</span>
-      </motion.button>
+      <div className="w-full mx-3 sm:mx-6 md:mx-10 relative z-20">
+        <motion.button
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+          onClick={() => setIsModalOpen(true)}
+          style={{
+            boxShadow: '0 10px 25px -5px rgba(0, 22, 98, 0.5), 0 0 15px rgba(0, 22, 98, 0.3)',
+          }}
+          className="w-full bg-[#001662] hover:bg-[#0A1128] text-white font-black text-base sm:text-xl md:text-2xl py-5 rounded-3xl uppercase tracking-wider transition duration-300 cursor-pointer border border-white/30 text-center flex items-center justify-center gap-3 shadow-2xl"
+        >
+          <span>BERI HARAPAN</span>
+        </motion.button>
+      </div>
 
       {/* POPUP MODAL FORM INPUT HARAPAN */}
       <AnimatePresence>
