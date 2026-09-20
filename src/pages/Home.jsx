@@ -12,16 +12,6 @@ function WishBoardSection() {
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Helper untuk hasilkan posisi & durasi acak stabil berdasarkan isi teks/ID
-  const getRandomFromHash = (str, min, max) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const positiveHash = Math.abs(hash);
-    return min + (positiveHash % (max - min + 1));
-  };
-
   // 1. Ambil data harapan dari MySQL via Netlify Backend
   const fetchWishes = async () => {
     try {
@@ -29,36 +19,35 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Pembagian 5 Zona Kolom agar terdistribusi merata dari Paling Kiri sampai Paling Kanan
+        // Bagi layar jadi 5 zona utama dari Ujung Kiri (2%) sampai Ujung Kanan (80%)
         const zones = [
-          { min: 2, max: 14 },   // Paling Kiri
-          { min: 18, max: 30 },  // Tengah Kiri
-          { min: 34, max: 46 },  // Tengah
-          { min: 50, max: 62 },  // Tengah Kanan
-          { min: 66, max: 78 }   // Paling Kanan
+          { min: 2, max: 15 },   // Paling Kiri
+          { min: 18, max: 32 },  // Tengah Kiri
+          { min: 35, max: 48 },  // Tengah
+          { min: 52, max: 65 },  // Tengah Kanan
+          { min: 68, max: 80 }   // Paling Kanan
         ];
 
         const formattedData = data.map((item, index) => {
-          const seed = item.id || item._id || item.text || index.toString();
+          // Pilih zona secara bergantian agar terisi rata dari kiri ke kanan
+          const zone = zones[index % zones.length];
+          // Acak posisi murni di dalam zona tersebut (berubah tiap refresh/fetch)
+          const randomX = Math.floor(Math.random() * (zone.max - zone.min + 1)) + zone.min;
           
-          // Ambil zona berdasarkan urutan index agar tersebar merata ke 5 kolom
-          const zoneObj = zones[index % zones.length];
-          const randomOffset = getRandomFromHash(seed + 'pos', 0, zoneObj.max - zoneObj.min);
-          const xPos = `${zoneObj.min + randomOffset}%`;
+          // Durasi acak (8 - 14 detik) agar kecepatan melayang tiap kartu beda-beda
+          const duration = Math.floor(Math.random() * 7) + 8;
           
-          // Durasi animasi bervariasi (8 - 14 detik) supaya kecepatannya beda-beda
-          const duration = getRandomFromHash(seed + 'dur', 8, 14);
-          
-          // Delay jeda antar kartu agar tidak melayang beriringan
-          const delay = (index % 6) * 2.3;
+          // Delay acak agar tidak pernah start bersamaan di baris yang sama
+          const delay = (index % 6) * 1.6 + Math.random() * 0.8;
 
           return {
             ...item,
-            xPos,
+            xPos: `${randomX}%`,
             duration,
             delay,
           };
         });
+
         setWishes(formattedData);
       }
     } catch (error) {
@@ -96,7 +85,7 @@ function WishBoardSection() {
   return (
     <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS (MENYEBAR ACAK TANPA TERTUMPUK) */}
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS (TERSEBAR RATA KIRI-KANAN & BISA PINDAH-PINDAH) */}
       <div className="absolute left-0 right-0 w-full -top-64 bottom-0 pointer-events-none z-10 overflow-visible">
         <AnimatePresence>
           {!loading &&
@@ -105,7 +94,7 @@ function WishBoardSection() {
                 key={item.id || item._id || item.text}
                 initial={{ y: 220, opacity: 0 }}
                 animate={{
-                  y: -150,
+                  y: -160,
                   opacity: [0, 1, 1, 0.3, 0],
                 }}
                 transition={{
@@ -115,7 +104,7 @@ function WishBoardSection() {
                   delay: item.delay || 0,
                 }}
                 style={{ left: item.xPos }}
-                className="absolute w-fit max-w-[220px] sm:max-w-[300px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
+                className="absolute w-fit max-w-[200px] sm:max-w-[270px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
               >
                 <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">
                   "{item.text}"
