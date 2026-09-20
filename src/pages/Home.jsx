@@ -19,34 +19,36 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Sebar posisi horizontal terbagi rata dalam 5 zona dari Ujung Kiri (2%) hingga Ujung Kanan Terluar (85%)
+        // Pembagian 5 Zona Kolom agar tersebar merata dari Ujung Kiri (2%) sampai Ujung Kanan (82%)
         const zones = [
-          { min: 2, max: 14 },   // Paling Kiri
-          { min: 20, max: 32 },  // Tengah Kiri
-          { min: 38, max: 50 },  // Tengah
-          { min: 56, max: 68 },  // Tengah Kanan
-          { min: 74, max: 85 }   // Paling Kanan
+          { min: 2, max: 14 },   // Zona Kiri Terluar
+          { min: 18, max: 32 },  // Zona Kiri Tengah
+          { min: 36, max: 48 },  // Zona Tengah
+          { min: 52, max: 66 },  // Zona Kanan Tengah
+          { min: 70, max: 82 }   // Zona Kanan Terluar
         ];
 
         const formattedData = data.map((item, index) => {
           const zone = zones[index % zones.length];
           const randomX = Math.floor(Math.random() * (zone.max - zone.min + 1)) + zone.min;
           
-          // Durasi melayang vertikal acak (9 - 15 detik) agar pergerakan tidak bersamaan
-          const duration = Math.floor(Math.random() * 7) + 9;
+          // Durasi melayang vertikal (Y) acak (10 - 16 detik)
+          const duration = Math.floor(Math.random() * 7) + 10;
           
           // Delay jeda start antar kartu
           const delay = (index % 6) * 1.8 + Math.random() * 0.8;
 
-          // Variasi jarak goyang kanan-kiri (sway distance) agar makin alami
-          const swayOffset = (index % 2 === 0 ? 1 : -1) * (18 + (index % 3) * 4);
+          // Jarak menggeser kanan-kiri (sway) diperbesar (35px - 50px) agar pergerakan kanan-kiri sangat terasa
+          const swayDistance = 35 + (index % 4) * 5; 
+          const direction = index % 2 === 0 ? 1 : -1;
 
           return {
             ...item,
             xPos: `${randomX}%`,
             duration,
             delay,
-            swayOffset,
+            swayDistance: swayDistance * direction,
+            swayDuration: 4.5 + (index % 3) * 0.8, // 4.5s - 6.1s untuk gerakan kanan-kiri yang sangat mulus
           };
         });
 
@@ -87,44 +89,44 @@ function WishBoardSection() {
   return (
     <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS (PERGERAKAN SWAY KANAN-KIRI SUPER SMOOTH) */}
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS (PERGERAKAN GESER KANAN-KIRI SUPER SMOOTH) */}
       <div className="absolute left-0 right-0 w-full -top-64 bottom-0 pointer-events-none z-10 overflow-visible">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
               <motion.div
                 key={item.id || item._id || item.text}
-                initial={{ y: 220, opacity: 0, x: 0 }}
+                initial={{ y: 230, opacity: 0, x: -item.swayDistance }}
                 animate={{
-                  y: -170,
-                  // Pergerakan kanan-kiri kontinu (-sway ke +sway)
-                  x: [-item.swayOffset || -18, item.swayOffset || 18, -item.swayOffset || -18],
-                  rotate: [-1.5, 1.5, -1.5],
+                  y: -180,
+                  // Menggeser dari -swayDistance ke +swayDistance secara terus menerus
+                  x: [item.swayDistance, -item.swayDistance, item.swayDistance],
+                  rotate: [-2, 2, -2],
                   opacity: [0, 1, 1, 0.4, 0],
                 }}
                 transition={{
                   y: {
-                    duration: item.duration || 11,
+                    duration: item.duration || 12,
                     repeat: Infinity,
                     ease: 'linear',
                     delay: item.delay || 0,
                   },
-                  // Gerakan goyang horizontal (X) dibuat super halus dengan sinusoidal easeInOut
+                  // Gerakan geser horizontal (X) kanan-kiri super mulus
                   x: {
-                    duration: 4.8,
+                    duration: item.swayDuration || 5,
                     repeat: Infinity,
                     repeatType: 'mirror',
                     ease: 'easeInOut',
-                    delay: (item.delay || 0) * 0.5,
+                    delay: (item.delay || 0) * 0.4,
                   },
                   rotate: {
-                    duration: 5.5,
+                    duration: 5,
                     repeat: Infinity,
                     repeatType: 'mirror',
                     ease: 'easeInOut',
                   },
                   opacity: {
-                    duration: item.duration || 11,
+                    duration: item.duration || 12,
                     repeat: Infinity,
                     ease: 'linear',
                     delay: item.delay || 0,
