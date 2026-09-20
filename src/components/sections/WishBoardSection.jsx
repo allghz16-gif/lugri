@@ -10,17 +10,17 @@ export default function WishBoardSection() {
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. Ambil data dari backend via API asli kamu
+  // 1. Ambil data dari TiDB Cloud via Axios
   const fetchWishes = async () => {
     try {
       const response = await API.get('/wishes');
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Generasikan persentase acak (5% - 80%) untuk setiap item agar tersebar merata
+        // Buat posisi xPos acak merata (5% - 75%) untuk setiap data dari TiDB
         const formattedData = data.map((item, index) => ({
           ...item,
-          xPos: `${Math.floor(Math.random() * 75) + 5}%`,
+          xPos: `${Math.floor(Math.random() * 70) + 5}%`,
           delay: (index % 5) * 1.5,
         }));
         setWishes(formattedData);
@@ -36,7 +36,7 @@ export default function WishBoardSection() {
     fetchWishes();
   }, []);
 
-  // 2. Kirim data baru ke backend via API asli kamu
+  // 2. Kirim harapan baru ke TiDB Cloud
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
@@ -50,7 +50,7 @@ export default function WishBoardSection() {
         setInputText('');
         setInputName('');
         setIsModalOpen(false);
-        fetchWishes(); // Refresh otomatis dari database
+        fetchWishes(); // Refresh data dari database
       } else {
         alert('Gagal mengirim harapan.');
       }
@@ -63,7 +63,7 @@ export default function WishBoardSection() {
   return (
     <section className="relative w-full max-w-6xl mx-auto px-4 my-12 h-[120px] flex items-center justify-center overflow-visible">
       
-      {/* AREA HARAPAN (TERSEBAR MERATA DENGAN INLINE STYLE LEFT) */}
+      {/* AREA TEKS HARAPAN MELAYANG (SEBAR MERATA) */}
       <div className="absolute inset-x-0 overflow-visible pointer-events-none -top-16 -bottom-16 z-10">
         <AnimatePresence>
           {!loading &&
@@ -81,7 +81,7 @@ export default function WishBoardSection() {
                   ease: 'linear',
                   delay: item.delay || 0,
                 }}
-                style={{ left: item.xPos }} // Menggunakan style={{ left }} langsung agar posisinya tersebar merata
+                style={{ left: item.xPos }} // Wajib pakai style inline agar posisi acak dibaca tepat
                 className="absolute max-w-[220px] sm:max-w-[280px] bg-[#eef7ff]/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg pointer-events-auto border border-blue-100/60"
               >
                 <p className="text-[11px] sm:text-xs text-[#003366] font-semibold leading-relaxed break-words">
