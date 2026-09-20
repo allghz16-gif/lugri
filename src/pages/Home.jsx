@@ -12,6 +12,16 @@ function WishBoardSection() {
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Helper untuk hasilkan posisi & durasi acak stabil berdasarkan isi teks/ID
+  const getRandomFromHash = (str, min, max) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const positiveHash = Math.abs(hash);
+    return min + (positiveHash % (max - min + 1));
+  };
+
   // 1. Ambil data harapan dari MySQL via Netlify Backend
   const fetchWishes = async () => {
     try {
@@ -19,17 +29,23 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Atur posisi xPos, yOffset, dan delay agar tidak bertumpukan
         const formattedData = data.map((item, index) => {
-          const xPos = `${(index % 5) * 18 + 4}%`;
-          const delay = (index % 5) * 2.2;
-          const yOffset = (index % 3) * 30; // Ketinggian muncul dibuat beda-beda
+          const seed = item.id || item._id || item.text || index.toString();
+          
+          // Sebar koordinat horizontal acak penuh dari 2% sampai 72%
+          const xPos = `${getRandomFromHash(seed + 'x', 2, 72)}%`;
+          
+          // Durasi animasi bervariasi (8 - 14 detik) supaya kecepatannya beda-beda
+          const duration = getRandomFromHash(seed + 'dur', 8, 14);
+          
+          // Delay jeda antar kartu agar tidak melayang beriringan
+          const delay = (index % 6) * 2.3;
 
           return {
             ...item,
             xPos,
+            duration,
             delay,
-            yOffset,
           };
         });
         setWishes(formattedData);
@@ -69,27 +85,26 @@ function WishBoardSection() {
   return (
     <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS (SELEBAR SELURUH LAYAR MONITOR) */}
-      <div className="absolute left-0 right-0 w-full -top-60 bottom-0 pointer-events-none z-10">
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS (MENYEBAR ACAK TANPA TERTUMPUK) */}
+      <div className="absolute left-0 right-0 w-full -top-64 bottom-0 pointer-events-none z-10 overflow-visible">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
               <motion.div
-                key={item.id || item._id}
-                initial={{ y: 180 + item.yOffset, opacity: 0 }}
+                key={item.id || item._id || item.text}
+                initial={{ y: 220, opacity: 0 }}
                 animate={{
-                  y: -120 - item.yOffset,
-                  opacity: [0, 1, 1, 0.4, 0],
+                  y: -150,
+                  opacity: [0, 1, 1, 0.3, 0],
                 }}
                 transition={{
-                  duration: 8,
+                  duration: item.duration || 10,
                   repeat: Infinity,
-                  ease: 'easeInOut',
+                  ease: 'linear',
                   delay: item.delay || 0,
                 }}
                 style={{ left: item.xPos }}
-                // w-fit membuat kotak kata pendek menjadi ringkas dan pas dengan teksnya
-                className="absolute w-fit max-w-[240px] sm:max-w-[320px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
+                className="absolute w-fit max-w-[220px] sm:max-w-[300px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
               >
                 <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">
                   "{item.text}"

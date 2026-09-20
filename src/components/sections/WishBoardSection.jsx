@@ -5,6 +5,16 @@ function WishBoardSection() {
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fungsi helper untuk menghasilkan angka acak stabil berdasarkan string (ID/Teks)
+  const getRandomFromHash = (str, min, max) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const positiveHash = Math.abs(hash);
+    return min + (positiveHash % (max - min + 1));
+  };
+
   // 1. Ambil data harapan dari MySQL via Netlify Backend
   const fetchWishes = async () => {
     try {
@@ -12,20 +22,23 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Generasikan posisi xPos & yOffset acak agar kartu tidak bertabrakan/saling menutupi
         const formattedData = data.map((item, index) => {
-          // Buat 6 kolom posisi horizontal terdistribusi
-          const xPos = `${(index % 5) * 18 + 4}%`;
-          // Kecepatan & penundaan acak agar tidak pernah naik bersamaan di baris yang sama
-          const delay = (index % 5) * 2.2;
-          // Offset ketinggian vertikal acak (antara 0px - 60px)
-          const yOffset = (index % 3) * 25;
+          const uniqueSeed = item.id || item._id || item.text || index.toString();
+          
+          // Sebar posisi horizontal acak dari 3% sampai 75%
+          const xPos = `${getRandomFromHash(uniqueSeed + 'x', 3, 75)}%`;
+          
+          // Durasi animasi bervariasi (7 sampai 13 detik) agar tidak melayang barengan
+          const duration = getRandomFromHash(uniqueSeed + 'dur', 8, 14);
+          
+          // Delay bertingkat
+          const delay = (index % 7) * 1.8;
 
           return {
             ...item,
             xPos,
+            duration,
             delay,
-            yOffset,
           };
         });
         setWishes(formattedData);
@@ -65,26 +78,26 @@ function WishBoardSection() {
   return (
     <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS (SELEBAR SELURUH LAYAR MONITOR) */}
-      <div className="absolute left-0 right-0 w-full -top-60 bottom-0 pointer-events-none z-10">
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS */}
+      <div className="absolute left-0 right-0 w-full -top-64 bottom-0 pointer-events-none z-10 overflow-visible">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
               <motion.div
-                key={item.id || item._id}
-                initial={{ y: 180 + item.yOffset, opacity: 0 }}
+                key={item.id || item._id || item.text}
+                initial={{ y: 200, opacity: 0 }}
                 animate={{
-                  y: -120 - item.yOffset,
-                  opacity: [0, 1, 1, 0.4, 0],
+                  y: -140,
+                  opacity: [0, 1, 1, 0.3, 0],
                 }}
                 transition={{
-                  duration: 8,
+                  duration: item.duration || 10,
                   repeat: Infinity,
-                  ease: 'easeInOut',
+                  ease: 'linear',
                   delay: item.delay || 0,
                 }}
                 style={{ left: item.xPos }}
-                className="absolute w-fit max-w-[240px] sm:max-w-[320px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20 transition-all duration-300"
+                className="absolute w-fit max-w-[220px] sm:max-w-[300px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
               >
                 <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">
                   "{item.text}"
