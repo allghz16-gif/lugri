@@ -31,7 +31,7 @@ function WishBoardSection() {
         const formattedData = data.map((item, index) => {
           // Pilih zona secara bergantian agar terisi rata dari kiri ke kanan
           const zone = zones[index % zones.length];
-          // Acak posisi murni di dalam zona tersebut (berubah tiap refresh/fetch)
+          // Acak posisi murni di dalam zona tersebut
           const randomX = Math.floor(Math.random() * (zone.max - zone.min + 1)) + zone.min;
           
           // Durasi acak (8 - 14 detik) agar kecepatan melayang tiap kartu beda-beda
@@ -85,23 +85,45 @@ function WishBoardSection() {
   return (
     <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS (TERSEBAR RATA KIRI-KANAN & BISA PINDAH-PINDAH) */}
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS (GOYANG HALUS/SMOOTH KANAN-KIRI) */}
       <div className="absolute left-0 right-0 w-full -top-64 bottom-0 pointer-events-none z-10 overflow-visible">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
               <motion.div
                 key={item.id || item._id || item.text}
-                initial={{ y: 220, opacity: 0 }}
+                initial={{ y: 220, x: 0, opacity: 0 }}
                 animate={{
                   y: -160,
+                  x: [-12, 12, -12], // Goyang halus horizontal ke kiri-kanan
+                  rotate: [-2, 2, -2], // Kemiringan tipis super smooth
                   opacity: [0, 1, 1, 0.3, 0],
                 }}
                 transition={{
-                  duration: item.duration || 10,
-                  repeat: Infinity,
-                  ease: 'linear',
-                  delay: item.delay || 0,
+                  y: {
+                    duration: item.duration || 10,
+                    repeat: Infinity,
+                    ease: 'linear',
+                    delay: item.delay || 0,
+                  },
+                  x: {
+                    duration: 3.5,
+                    repeat: Infinity,
+                    repeatType: 'reverse',
+                    ease: 'easeInOut',
+                  },
+                  rotate: {
+                    duration: 4,
+                    repeat: Infinity,
+                    repeatType: 'reverse',
+                    ease: 'easeInOut',
+                  },
+                  opacity: {
+                    duration: item.duration || 10,
+                    repeat: Infinity,
+                    ease: 'linear',
+                    delay: item.delay || 0,
+                  },
                 }}
                 style={{ left: item.xPos }}
                 className="absolute w-fit max-w-[200px] sm:max-w-[270px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
