@@ -10,25 +10,24 @@ export default function WishBoardSection() {
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. Ambil data harapan dari database
+  // 1. Ambil data asli dari TiDB Cloud via API
   const fetchWishes = async () => {
     try {
       const response = await API.get('/wishes');
       const data = response.data.data || response.data;
 
-      // Sebar posisi xPos secara acak menyeluruh dari 5% sampai 80% layar agar tidak di kiri saja
-      const formattedData = data.map((item, index) => {
-        const randomLeft = Math.random() * 75 + 5; // Rentang acak merata
-        return {
-          ...item,
-          xPos: `${randomLeft}%`,
-          delay: index * 1.2,
-        };
-      });
+      // Hitung posisi acak xPos (5% - 80%) secara dinamis untuk setiap data dari TiDB
+      const formattedData = Array.isArray(data)
+        ? data.map((item, index) => ({
+            ...item,
+            xPos: `${Math.floor(Math.random() * 75) + 5}%`,
+            delay: (index % 6) * 1.5,
+          }))
+        : [];
 
       setWishes(formattedData);
     } catch (error) {
-      console.error('Error fetching wishes:', error);
+      console.error('Error fetching wishes from TiDB:', error);
     } finally {
       setLoading(false);
     }
@@ -38,26 +37,26 @@ export default function WishBoardSection() {
     fetchWishes();
   }, []);
 
-  // 2. Simpan harapan baru ke database
+  // 2. Simpan harapan baru langsung ke TiDB Cloud
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
 
+    const fullText = inputName.trim() ? `${inputName}: ${inputText}` : inputText;
+
     try {
-      const response = await API.post('/wishes', { 
-        text: inputName ? `${inputName}: ${inputText}` : inputText 
-      });
+      const response = await API.post('/wishes', { text: fullText });
 
       if (response.status === 200 || response.status === 201) {
         setInputText('');
         setInputName('');
         setIsModalOpen(false);
-        fetchWishes(); // Refresh data otomatis
+        fetchWishes(); // Refresh otomatis agar data baru dari TiDB langsung muncul
       } else {
         alert('Gagal mengirim harapan.');
       }
     } catch (error) {
-      console.error('Error submitting wish:', error);
+      console.error('Error submitting wish to TiDB:', error);
       alert('Gagal mengirim harapan ke server.');
     }
   };
@@ -65,13 +64,13 @@ export default function WishBoardSection() {
   return (
     <section className="relative w-full max-w-6xl mx-auto px-4 my-12 h-[120px] flex items-center justify-center overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS (Diperluas agar menyebar ke seluruh layar) */}
-      <div className="absolute -left-12 -right-12 sm:-left-32 sm:-right-32 overflow-visible pointer-events-none -top-32 bottom-0 z-10">
+      {/* AREA HARAPAN DARI TIDB (MELAYANG BEBAS MERATA KIRI - TENGAH - KANAN) */}
+      <div className="absolute inset-x-0 overflow-visible pointer-events-none -top-16 -bottom-16 z-10">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
               <motion.div
-                key={item.id}
+                key={item.id || item._id}
                 initial={{ y: 140, opacity: 0 }}
                 animate={{
                   y: -140,
@@ -83,10 +82,10 @@ export default function WishBoardSection() {
                   ease: 'linear',
                   delay: item.delay || 0,
                 }}
-                style={{ left: item.xPos }}
-                className="absolute max-w-[220px] sm:max-w-[280px] bg-[#001662]/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl pointer-events-auto border border-white/20 text-white"
+                style={{ left: item.xPos }} // Inline style agar posisi acak dari TiDB terbaca sempurna
+                className="absolute max-w-[220px] sm:max-w-[280px] bg-[#eef7ff]/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg pointer-events-auto border border-blue-100/60"
               >
-                <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">
+                <p className="text-[11px] sm:text-xs text-[#003366] font-semibold leading-relaxed break-words">
                   "{item.text}"
                 </p>
               </motion.div>
@@ -103,13 +102,13 @@ export default function WishBoardSection() {
           style={{
             boxShadow: '0 0 30px rgba(0, 195, 255, 0.9), 0 0 12px rgba(255, 255, 255, 0.8)',
           }}
-          className="bg-gradient-to-r from-[#0099ff] via-[#00c3ff] to-[#0099ff] text-white font-black text-xs sm:text-sm md:text-base px-8 py-3.5 rounded-full uppercase tracking-wider transition duration-300 cursor-pointer border border-white/50 whitespace-nowrap shadow-2xl"
+          className="bg-gradient-to-r from-[#0099ff] via-[#00c3ff] to-[#0099ff] text-white font-black text-xs sm:text-sm md:text-base px-8 py-3.5 rounded-full uppercase tracking-wider transition duration-300 cursor-pointer border border-white/50 whitespace-nowrap"
         >
           BERI HARAPAN
         </motion.button>
       </div>
 
-      {/* MODAL INPUT HARAPAN */}
+      {/* POPUP MODAL INPUT HARAPAN */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md text-left">
@@ -130,7 +129,7 @@ export default function WishBoardSection() {
                 Tulis Harapanmu
               </h4>
               <p className="text-xs text-slate-300 mb-6">
-                Harapanmu akan ditampilkan melayang secara acak di halaman ini!
+                Harapanmu akan disimpan ke database dan ditampilkan melayang!
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
