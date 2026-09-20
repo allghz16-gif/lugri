@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send } from 'lucide-react';
+import API from '../api';
 
 export default function WishBoardSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -9,24 +10,23 @@ export default function WishBoardSection() {
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. Ambil data asli dari TiDB Cloud via API
+  // 1. Ambil data dari backend via API asli kamu
   const fetchWishes = async () => {
     try {
       const response = await API.get('/wishes');
       const data = response.data.data || response.data;
 
-      // Hitung posisi acak xPos (5% - 80%) secara dinamis untuk setiap data dari TiDB
-      const formattedData = Array.isArray(data)
-        ? data.map((item, index) => ({
-            ...item,
-            xPos: `${Math.floor(Math.random() * 75) + 5}%`,
-            delay: (index % 6) * 1.5,
-          }))
-        : [];
-
-      setWishes(formattedData);
+      if (Array.isArray(data)) {
+        // Generasikan persentase acak (5% - 80%) untuk setiap item agar tersebar merata
+        const formattedData = data.map((item, index) => ({
+          ...item,
+          xPos: `${Math.floor(Math.random() * 75) + 5}%`,
+          delay: (index % 5) * 1.5,
+        }));
+        setWishes(formattedData);
+      }
     } catch (error) {
-      console.error('Error fetching wishes from TiDB:', error);
+      console.error('Error fetching wishes:', error);
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,7 @@ export default function WishBoardSection() {
     fetchWishes();
   }, []);
 
-  // 2. Simpan harapan baru langsung ke TiDB Cloud
+  // 2. Kirim data baru ke backend via API asli kamu
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
@@ -50,12 +50,12 @@ export default function WishBoardSection() {
         setInputText('');
         setInputName('');
         setIsModalOpen(false);
-        fetchWishes(); // Refresh otomatis agar data baru dari TiDB langsung muncul
+        fetchWishes(); // Refresh otomatis dari database
       } else {
         alert('Gagal mengirim harapan.');
       }
     } catch (error) {
-      console.error('Error submitting wish to TiDB:', error);
+      console.error('Error submitting wish:', error);
       alert('Gagal mengirim harapan ke server.');
     }
   };
@@ -63,7 +63,7 @@ export default function WishBoardSection() {
   return (
     <section className="relative w-full max-w-6xl mx-auto px-4 my-12 h-[120px] flex items-center justify-center overflow-visible">
       
-      {/* AREA HARAPAN DARI TIDB (MELAYANG BEBAS MERATA KIRI - TENGAH - KANAN) */}
+      {/* AREA HARAPAN (TERSEBAR MERATA DENGAN INLINE STYLE LEFT) */}
       <div className="absolute inset-x-0 overflow-visible pointer-events-none -top-16 -bottom-16 z-10">
         <AnimatePresence>
           {!loading &&
@@ -81,7 +81,7 @@ export default function WishBoardSection() {
                   ease: 'linear',
                   delay: item.delay || 0,
                 }}
-                style={{ left: item.xPos }} // Inline style agar posisi acak dari TiDB terbaca sempurna
+                style={{ left: item.xPos }} // Menggunakan style={{ left }} langsung agar posisinya tersebar merata
                 className="absolute max-w-[220px] sm:max-w-[280px] bg-[#eef7ff]/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg pointer-events-auto border border-blue-100/60"
               >
                 <p className="text-[11px] sm:text-xs text-[#003366] font-semibold leading-relaxed break-words">
@@ -101,13 +101,13 @@ export default function WishBoardSection() {
           style={{
             boxShadow: '0 0 30px rgba(0, 195, 255, 0.9), 0 0 12px rgba(255, 255, 255, 0.8)',
           }}
-          className="bg-gradient-to-r from-[#0099ff] via-[#00c3ff] to-[#0099ff] text-white font-black text-xs sm:text-sm md:text-base px-8 py-3.5 rounded-full uppercase tracking-wider transition duration-300 cursor-pointer border border-white/50 whitespace-nowrap"
+          className="bg-gradient-to-r from-[#0099ff] via-[#00c3ff] to-[#0099ff] text-white font-black text-xs sm:text-sm md:text-base px-8 py-3.5 rounded-full uppercase tracking-wider transition duration-300 cursor-pointer border border-white/50 whitespace-nowrap shadow-2xl"
         >
           BERI HARAPAN
         </motion.button>
       </div>
 
-      {/* POPUP MODAL INPUT HARAPAN */}
+      {/* MODAL INPUT HARAPAN */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md text-left">
