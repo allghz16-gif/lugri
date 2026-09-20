@@ -16,16 +16,17 @@ function WishBoardSection() {
   const fetchWishes = async () => {
     try {
       const response = await API.get('/wishes');
-      const data = response.data;
+      const data = response.data.data || response.data;
 
-      // Tambahkan xPos & delay dinamis untuk keperluan animasi melayang
-      const formattedData = data.map((item, index) => ({
-        ...item,
-        xPos: `${(index % 4) * 22 + 5}%`,
-        delay: index * 1.5,
-      }));
-
-      setWishes(formattedData);
+      if (Array.isArray(data)) {
+        // Generasikan xPos persentase terdistribusi (dari zona 5% sampai 75%)
+        const formattedData = data.map((item, index) => ({
+          ...item,
+          xPos: `${(index % 4) * 20 + 5}%`,
+          delay: index * 1.5,
+        }));
+        setWishes(formattedData);
+      }
     } catch (error) {
       console.error('Error fetching wishes:', error);
     } finally {
@@ -62,12 +63,12 @@ function WishBoardSection() {
     <section className="relative mx-3 sm:mx-6 md:mx-10 my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
       {/* AREA TEKS HARAPAN MELAYANG BEBAS */}
-      <div className="absolute inset-x-0 -top-48 bottom-0 pointer-events-none">
+      <div className="absolute inset-x-0 -top-48 bottom-0 pointer-events-none w-full">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
               <motion.div
-                key={item.id}
+                key={item.id || item._id}
                 initial={{ y: 160, opacity: 0 }}
                 animate={{
                   y: -100,
@@ -79,7 +80,8 @@ function WishBoardSection() {
                   ease: 'easeInOut',
                   delay: item.delay || 0,
                 }}
-                className={`absolute ${item.xPos} max-w-[260px] sm:max-w-[340px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto z-10 border border-white/20`}
+                style={{ left: item.xPos }} // Dipasang via inline style agar persentase dibaca penuh dari kiri ke kanan
+                className="absolute max-w-[260px] sm:max-w-[340px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto z-10 border border-white/20"
               >
                 <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">
                   "{item.text}"

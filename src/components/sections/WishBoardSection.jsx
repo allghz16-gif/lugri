@@ -10,17 +10,26 @@ export default function WishBoardSection() {
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Ambil data dari backend Netlify/TiDB
   const fetchWishes = async () => {
     try {
       const response = await API.get('/wishes');
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        const formattedData = data.map((item, index) => ({
-          ...item,
-          xPos: `${Math.floor(Math.random() * 70) + 5}%`,
-          delay: (index % 5) * 1.5,
-        }));
+        // Pilihan daftar posisi acak terdistribusi (agar tidak pernah tumpuk di kiri)
+        const formattedData = data.map((item, index) => {
+          // Bagi layar jadi 5 zona horizontal (misal: 5-20%, 20-40%, 40-60%, 60-80%)
+          const zone = (index % 4) * 20 + 5; 
+          const randomOffset = Math.floor(Math.random() * 15);
+          const calculatedPos = `${zone + randomOffset}%`;
+
+          return {
+            ...item,
+            xPos: calculatedPos,
+            delay: (index % 6) * 2,
+          };
+        });
         setWishes(formattedData);
       }
     } catch (error) {
@@ -58,28 +67,30 @@ export default function WishBoardSection() {
   };
 
   return (
-    <section className="relative w-full max-w-6xl mx-auto px-4 my-12 h-[120px] flex items-center justify-center overflow-visible">
-      <div className="absolute inset-x-0 overflow-visible pointer-events-none -top-16 -bottom-16 z-10">
+    <section className="relative w-full max-w-7xl mx-auto px-4 my-16 h-[140px] flex items-center justify-center overflow-visible">
+      
+      {/* CONTAINER WIDE UNTUK KARTU MELAYANG (W-FULL & ABSOLUTE INSET-X-0) */}
+      <div className="absolute inset-x-0 w-full h-full overflow-visible pointer-events-none -top-20 -bottom-20 z-10">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
               <motion.div
                 key={item.id || item._id}
-                initial={{ y: 140, opacity: 0 }}
+                initial={{ y: 160, opacity: 0 }}
                 animate={{
-                  y: -140,
-                  opacity: [0, 0.95, 0.95, 0],
+                  y: -160,
+                  opacity: [0, 1, 1, 0],
                 }}
                 transition={{
-                  duration: 12,
+                  duration: 14,
                   repeat: Infinity,
                   ease: 'linear',
                   delay: item.delay || 0,
                 }}
-                style={{ left: item.xPos }}
-                className="absolute max-w-[220px] sm:max-w-[280px] bg-[#eef7ff]/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg pointer-events-auto border border-blue-100/60"
+                style={{ left: item.xPos }} // Menggunakan left persentase sesuai zona terdistribusi
+                className="absolute max-w-[200px] sm:max-w-[260px] bg-[#eef7ff]/95 backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-blue-100/80"
               >
-                <p className="text-[11px] sm:text-xs text-[#003366] font-semibold leading-relaxed break-words">
+                <p className="text-[11px] sm:text-xs text-[#003366] font-bold leading-relaxed break-words">
                   "{item.text}"
                 </p>
               </motion.div>
@@ -87,6 +98,7 @@ export default function WishBoardSection() {
         </AnimatePresence>
       </div>
 
+      {/* TOMBOL BERI HARAPAN */}
       <div className="relative z-20">
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -101,6 +113,7 @@ export default function WishBoardSection() {
         </motion.button>
       </div>
 
+      {/* MODAL POPUP */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md text-left">
