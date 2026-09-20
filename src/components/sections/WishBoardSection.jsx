@@ -12,12 +12,22 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Hitung nilai xPos persentase terpisah
-        const formattedData = data.map((item, index) => ({
-          ...item,
-          xPos: `${(index % 4) * 22 + 5}%`,
-          delay: index * 1.5,
-        }));
+        // Generasikan posisi xPos & yOffset acak agar kartu tidak bertabrakan/saling menutupi
+        const formattedData = data.map((item, index) => {
+          // Buat 6 kolom posisi horizontal terdistribusi
+          const xPos = `${(index % 5) * 18 + 4}%`;
+          // Kecepatan & penundaan acak agar tidak pernah naik bersamaan di baris yang sama
+          const delay = (index % 5) * 2.2;
+          // Offset ketinggian vertikal acak (antara 0px - 60px)
+          const yOffset = (index % 3) * 25;
+
+          return {
+            ...item,
+            xPos,
+            delay,
+            yOffset,
+          };
+        });
         setWishes(formattedData);
       }
     } catch (error) {
@@ -53,28 +63,28 @@ function WishBoardSection() {
   };
 
   return (
-    <section className="relative mx-3 sm:mx-6 md:mx-10 my-8 flex items-center justify-center min-h-[120px] overflow-visible">
+    <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS */}
-      <div className="absolute inset-x-0 -top-48 bottom-0 pointer-events-none w-full">
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS (SELEBAR SELURUH LAYAR MONITOR) */}
+      <div className="absolute left-0 right-0 w-full -top-60 bottom-0 pointer-events-none z-10">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
               <motion.div
                 key={item.id || item._id}
-                initial={{ y: 160, opacity: 0 }}
+                initial={{ y: 180 + item.yOffset, opacity: 0 }}
                 animate={{
-                  y: -100,
+                  y: -120 - item.yOffset,
                   opacity: [0, 1, 1, 0.4, 0],
                 }}
                 transition={{
-                  duration: 6,
+                  duration: 8,
                   repeat: Infinity,
                   ease: 'easeInOut',
                   delay: item.delay || 0,
                 }}
-                style={{ left: item.xPos }} // xPos dimasukkan terpisah di inline style, bukan digabung dalam className string
-                className="absolute max-w-[260px] sm:max-w-[340px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto z-10 border border-white/20"
+                style={{ left: item.xPos }}
+                className="absolute w-fit max-w-[240px] sm:max-w-[320px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20 transition-all duration-300"
               >
                 <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">
                   "{item.text}"
@@ -85,17 +95,19 @@ function WishBoardSection() {
       </div>
 
       {/* TOMBOL BERI HARAPAN MEMANJANG (#001662) */}
-      <motion.button
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
-        onClick={() => setIsModalOpen(true)}
-        style={{
-          boxShadow: '0 10px 25px -5px rgba(0, 22, 98, 0.5), 0 0 15px rgba(0, 22, 98, 0.3)',
-        }}
-        className="relative z-20 w-full bg-[#001662] hover:bg-[#0A1128] text-white font-black text-base sm:text-xl md:text-2xl py-5 rounded-3xl uppercase tracking-wider transition duration-300 cursor-pointer border border-white/30 text-center flex items-center justify-center gap-3 shadow-2xl"
-      >
-        <span>BERI HARAPAN</span>
-      </motion.button>
+      <div className="w-full mx-3 sm:mx-6 md:mx-10 relative z-20">
+        <motion.button
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+          onClick={() => setIsModalOpen(true)}
+          style={{
+            boxShadow: '0 10px 25px -5px rgba(0, 22, 98, 0.5), 0 0 15px rgba(0, 22, 98, 0.3)',
+          }}
+          className="w-full bg-[#001662] hover:bg-[#0A1128] text-white font-black text-base sm:text-xl md:text-2xl py-5 rounded-3xl uppercase tracking-wider transition duration-300 cursor-pointer border border-white/30 text-center flex items-center justify-center gap-3 shadow-2xl"
+        >
+          <span>BERI HARAPAN</span>
+        </motion.button>
+      </div>
 
       {/* POPUP MODAL FORM INPUT HARAPAN */}
       <AnimatePresence>

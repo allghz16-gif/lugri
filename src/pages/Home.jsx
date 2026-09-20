@@ -19,12 +19,19 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Generasikan xPos persentase terdistribusi (dari zona 5% sampai 80% lebar layar)
-        const formattedData = data.map((item, index) => ({
-          ...item,
-          xPos: `${(index % 5) * 18 + 5}%`,
-          delay: index * 1.5,
-        }));
+        // Atur posisi xPos, yOffset, dan delay agar tidak bertumpukan
+        const formattedData = data.map((item, index) => {
+          const xPos = `${(index % 5) * 18 + 4}%`;
+          const delay = (index % 5) * 2.2;
+          const yOffset = (index % 3) * 30; // Ketinggian muncul dibuat beda-beda
+
+          return {
+            ...item,
+            xPos,
+            delay,
+            yOffset,
+          };
+        });
         setWishes(formattedData);
       }
     } catch (error) {
@@ -63,25 +70,26 @@ function WishBoardSection() {
     <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
       {/* AREA TEKS HARAPAN MELAYANG BEBAS (SELEBAR SELURUH LAYAR MONITOR) */}
-      <div className="absolute left-0 right-0 w-full -top-48 bottom-0 pointer-events-none z-10">
+      <div className="absolute left-0 right-0 w-full -top-60 bottom-0 pointer-events-none z-10">
         <AnimatePresence>
           {!loading &&
             wishes.map((item) => (
               <motion.div
                 key={item.id || item._id}
-                initial={{ y: 160, opacity: 0 }}
+                initial={{ y: 180 + item.yOffset, opacity: 0 }}
                 animate={{
-                  y: -100,
+                  y: -120 - item.yOffset,
                   opacity: [0, 1, 1, 0.4, 0],
                 }}
                 transition={{
-                  duration: 6,
+                  duration: 8,
                   repeat: Infinity,
                   ease: 'easeInOut',
                   delay: item.delay || 0,
                 }}
                 style={{ left: item.xPos }}
-                className="absolute max-w-[260px] sm:max-w-[340px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
+                // w-fit membuat kotak kata pendek menjadi ringkas dan pas dengan teksnya
+                className="absolute w-fit max-w-[240px] sm:max-w-[320px] bg-[#001662]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl pointer-events-auto border border-white/20"
               >
                 <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">
                   "{item.text}"
