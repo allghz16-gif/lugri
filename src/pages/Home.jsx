@@ -29,11 +29,22 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
+        // Pembagian 5 Zona Kolom agar terdistribusi merata dari Paling Kiri sampai Paling Kanan
+        const zones = [
+          { min: 2, max: 14 },   // Paling Kiri
+          { min: 18, max: 30 },  // Tengah Kiri
+          { min: 34, max: 46 },  // Tengah
+          { min: 50, max: 62 },  // Tengah Kanan
+          { min: 66, max: 78 }   // Paling Kanan
+        ];
+
         const formattedData = data.map((item, index) => {
           const seed = item.id || item._id || item.text || index.toString();
           
-          // Sebar koordinat horizontal acak penuh dari 2% sampai 72%
-          const xPos = `${getRandomFromHash(seed + 'x', 2, 72)}%`;
+          // Ambil zona berdasarkan urutan index agar tersebar merata ke 5 kolom
+          const zoneObj = zones[index % zones.length];
+          const randomOffset = getRandomFromHash(seed + 'pos', 0, zoneObj.max - zoneObj.min);
+          const xPos = `${zoneObj.min + randomOffset}%`;
           
           // Durasi animasi bervariasi (8 - 14 detik) supaya kecepatannya beda-beda
           const duration = getRandomFromHash(seed + 'dur', 8, 14);
