@@ -59,8 +59,6 @@ export default function WishBoardSection() {
 
   return (
     <section className="relative w-full max-w-6xl mx-auto px-4 my-12 h-[120px] flex items-center justify-center overflow-visible">
-      
-      {/* AREA TEKS HARAPAN MELAYANG (SEBAR MERATA) */}
       <div className="absolute inset-x-0 overflow-visible pointer-events-none -top-16 -bottom-16 z-10">
         <AnimatePresence>
           {!loading &&
@@ -89,7 +87,6 @@ export default function WishBoardSection() {
         </AnimatePresence>
       </div>
 
-      {/* TOMBOL BERI HARAPAN */}
       <div className="relative z-20">
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -104,7 +101,6 @@ export default function WishBoardSection() {
         </motion.button>
       </div>
 
-      {/* MODAL INPUT HARAPAN */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md text-left">
