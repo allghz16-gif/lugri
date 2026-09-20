@@ -19,27 +19,27 @@ function WishBoardSection() {
       const data = response.data.data || response.data;
 
       if (Array.isArray(data)) {
-        // Pembagian 5 Zona Kolom agar tersebar merata dari Ujung Kiri (2%) sampai Ujung Kanan (82%)
+        // Sebar 5 zona posisi awal murni terbagi rata dari Kiri (2%) sampai Kanan (82%)
         const zones = [
-          { min: 2, max: 14 },   // Zona Kiri Terluar
-          { min: 18, max: 32 },  // Zona Kiri Tengah
-          { min: 36, max: 48 },  // Zona Tengah
-          { min: 52, max: 66 },  // Zona Kanan Tengah
-          { min: 70, max: 82 }   // Zona Kanan Terluar
+          { min: 2, max: 14 },   // Zona 1 (Paling Kiri)
+          { min: 18, max: 32 },  // Zona 2
+          { min: 36, max: 48 },  // Zona 3 (Tengah)
+          { min: 52, max: 66 },  // Zona 4
+          { min: 70, max: 82 }   // Zona 5 (Paling Kanan)
         ];
 
         const formattedData = data.map((item, index) => {
           const zone = zones[index % zones.length];
           const randomX = Math.floor(Math.random() * (zone.max - zone.min + 1)) + zone.min;
           
-          // Durasi melayang vertikal (Y) acak (10 - 16 detik)
-          const duration = Math.floor(Math.random() * 7) + 10;
+          // Durasi melayang vertikal (Y) acak (10 - 15 detik)
+          const duration = Math.floor(Math.random() * 6) + 10;
           
           // Delay jeda start antar kartu
           const delay = (index % 6) * 1.8 + Math.random() * 0.8;
 
-          // Jarak menggeser kanan-kiri (sway) diperbesar (35px - 50px) agar pergerakan kanan-kiri sangat terasa
-          const swayDistance = 35 + (index % 4) * 5; 
+          // Jarak geser lurus horizontal (tanpa goyang/miring)
+          const swayDistance = 25 + (index % 3) * 10; // 25px - 45px
           const direction = index % 2 === 0 ? 1 : -1;
 
           return {
@@ -48,7 +48,7 @@ function WishBoardSection() {
             duration,
             delay,
             swayDistance: swayDistance * direction,
-            swayDuration: 4.5 + (index % 3) * 0.8, // 4.5s - 6.1s untuk gerakan kanan-kiri yang sangat mulus
+            swayDuration: 4 + (index % 3) * 1, // 4s - 6s
           };
         });
 
@@ -89,7 +89,7 @@ function WishBoardSection() {
   return (
     <section className="relative w-full my-8 flex items-center justify-center min-h-[120px] overflow-visible">
       
-      {/* AREA TEKS HARAPAN MELAYANG BEBAS (PERGERAKAN GESER KANAN-KIRI SUPER SMOOTH) */}
+      {/* AREA TEKS HARAPAN MELAYANG BEBAS (MURNI GESER KANAN-KIRI LURUS PERLAHAN) */}
       <div className="absolute left-0 right-0 w-full -top-64 bottom-0 pointer-events-none z-10 overflow-visible">
         <AnimatePresence>
           {!loading &&
@@ -99,9 +99,8 @@ function WishBoardSection() {
                 initial={{ y: 230, opacity: 0, x: -item.swayDistance }}
                 animate={{
                   y: -180,
-                  // Menggeser dari -swayDistance ke +swayDistance secara terus menerus
+                  // Murni bergeser horizontal lurus tanpa rotasi miring
                   x: [item.swayDistance, -item.swayDistance, item.swayDistance],
-                  rotate: [-2, 2, -2],
                   opacity: [0, 1, 1, 0.4, 0],
                 }}
                 transition={{
@@ -111,19 +110,13 @@ function WishBoardSection() {
                     ease: 'linear',
                     delay: item.delay || 0,
                   },
-                  // Gerakan geser horizontal (X) kanan-kiri super mulus
+                  // Gerakan geser lurus horizontal yang stabil dan lembut
                   x: {
                     duration: item.swayDuration || 5,
                     repeat: Infinity,
                     repeatType: 'mirror',
                     ease: 'easeInOut',
-                    delay: (item.delay || 0) * 0.4,
-                  },
-                  rotate: {
-                    duration: 5,
-                    repeat: Infinity,
-                    repeatType: 'mirror',
-                    ease: 'easeInOut',
+                    delay: (item.delay || 0) * 0.3,
                   },
                   opacity: {
                     duration: item.duration || 12,
