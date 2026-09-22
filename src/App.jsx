@@ -9,7 +9,6 @@ import ContactUs from './pages/ContactUs'
 import BrawijayaMuda from './pages/BrawijayaMuda'
 import BrawijayaBerkelana from './pages/BrawijayaBerkelana'
 import EJCS from './pages/EJCS'
-// Perbaikan path import ke folder sections
 import IntroAnimation from './components/sections/IntroAnimation'
 
 function App() {
